@@ -338,6 +338,3 @@
         "pytest-topics/test_module01.py::test_subtraction": true
       }%     
     ```
-    
-
-
