@@ -225,7 +225,44 @@
 - Click on the dropdown for `Default test runner` and select `pytest` from the dropdown.<br/><br/>
 - Now, bring your cursor on the first line of the file and right-click. You will see an option to run the test.<br/><br/>
   
-  ![](./imgs/Screenshot%202025-02-19%20at%209.35.28%E2%80%AFPM.png)
+  ![](./imgs/Screenshot%202025-02-19%20at%209.35.28%E2%80%AFPM.png)<br/><br/>
 
-- Click on the `Run 'pytest in test_module01'` option.<br/><br/>
+- Click on the `Run 'pytest in test_module01'` option. You will see logs like this:<br/><br/>
+
+  ```bash
+  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pycharm/_jb_pytest_runner.py --path /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_module01.py 
+  Testing started at 9:43 pm ...
+  Launching pytest with arguments /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_module01.py --no-header --no-summary -q in /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics
+  
+  ============================= test session starts ==============================
+  collecting ... collected 3 items
+  
+  test_module01.py::test_addition PASSED                                   [ 33%]
+  test_module01.py::test_subtraction FAILED                                [ 66%]
+  test_module01.py:4 (test_subtraction)
+  0 != 0
+  
+  Expected :0
+  Actual   :0
+  <Click to see difference>
+  
+  def test_subtraction():
+  >       assert 5 - 5 != 0, "Intentional failure 1"
+  E       AssertionError: Intentional failure 1
+  E       assert (5 - 5) != 0
+  
+  test_module01.py:6: AssertionError
+  
+  test_module01.py::test_integer_division PASSED                           [100%]
+  
+  ========================= 1 failed, 2 passed in 0.01s ==========================
+  
+  Process finished with exit code 1
+  ```
+  
+  ![](./imgs/Screenshot%202025-02-19%20at%209.46.47%E2%80%AFPM.png)
+
+- 
+
+  
 
