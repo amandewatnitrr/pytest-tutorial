@@ -192,3 +192,14 @@
   ```
 
 - Here, it clearly specifies which test passed and which failed. test_subtraction failed with the error message that we passed.
+- Also, the test classes should be named in the following way:
+  
+  ```python
+  class TestModuleName:
+      def test_function_name():
+          pass
+  ```
+  
+> [!IMPORTANT]
+> The file name should follow the naming convention `test_something.py` and the test function should follow the naming convention `test_function_name()`.
+> On, the similar note the test class should follow the naming convention `class TestClassName:` followed by the test functions conventions mentioned before.
