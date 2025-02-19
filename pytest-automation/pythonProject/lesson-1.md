@@ -305,5 +305,39 @@
 
 <hr/>
 
-  
+## `.pytest_cache`
+
+- The `.pytest_cache` directory is created by `pytest` to store the cache of the test results.
+- It stores the information about the last run of the test results.
+- We have 2 flags that we can use to control the cache:
+  - `-ff` or `--failed-first` - This flag will run the failed tests first.
+  - `-lf` or `--last-failed` - This flag will run the failed tests from the last run only.
+  - `-nf` or `--new-first` - This flag will run the new tests first.
+  - `--cache-clear` - This flag will clear the cache.
+  - `--cache-show` - This flag will show the cache.
+
+  - If, you want to see this do:
+
+    ```bash
+    $ cd .pytest_cache
+    $ tree
+    .
+    ├── CACHEDIR.TAG
+    ├── README.md
+    └── v
+        └── cache
+            ├── lastfailed
+            ├── nodeids
+            └── stepwise
+    3 directories, 5 files
+    $ cd v/cache
+    $ cat lastfailed
+      {
+        "pytest/test_module01.py": true,
+        "pytest-topics/test_module01.py::test_false": true,
+        "pytest-topics/test_module01.py::test_subtraction": true
+      }%     
+    ```
+    
+
 
