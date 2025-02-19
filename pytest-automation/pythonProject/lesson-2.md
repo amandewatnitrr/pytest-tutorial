@@ -67,9 +67,9 @@
         test = TestCases()
         test.run_tests()
     ```
-  
+
   Now, run the following command to run the test cases and you will obtain the output as shown below:
-  
+
     ```bash
     $ pytest pytest-assertions -v
     ====================================================================== test session starts =======================================================================
@@ -133,7 +133,7 @@
     FAILED pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
     ================================================================== 3 failed, 9 passed in 0.02s ===================================================================
     ```
-  
+
 ## Test Discovery with Pytest
 
 - Pytest provides a way to discover and run the test cases in a directory.
@@ -148,7 +148,7 @@
     <summary>Example</summary>
 
     ```bash
-    $  pytest -v                                                     ✔  pythonProject   at 03:56:19  
+    $  pytest -v
     ====================================================================== test session starts =======================================================================
     platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
     cachedir: .pytest_cache
@@ -223,25 +223,25 @@
     ================================================================== 4 failed, 11 passed in 0.03s ==================================================================
     ```
     </details>
-  
-    Here, we can see that all the test cases in the directory are executed in the order they are discovered. The failed test cases are also shown in the output.
 
-    For the record, we actually have a total of 15 testcases as of now. Now, you must be thinking how:
+  Here, we can see that all the test cases in the directory are executed in the order they are discovered. The failed test cases are also shown in the output.
+
+  For the record, we actually have a total of 15 testcases as of now. Now, you must be thinking how:
     - We have 3 testcases in `test_module01.py` file.
-    - We have 12 testcases in `test_module02.py` file. Out of which: 
-      - 4 are constant `True` testcases.
-      - 4 are `greater` testcases.
-      - 4 are `divmod` testcases.
+    - We have 12 testcases in `test_module02.py` file. Out of which:
+        - 4 are constant `True` testcases.
+        - 4 are `greater` testcases.
+        - 4 are `divmod` testcases.
 
 - We can also run pytests for a single file using the following command:
 
   ```bash
   $ pytest folder_name/sub_folder_name/.../test_something.py -v
   ```
-  
+
   <details>
   <summary>Example</summary>
-  
+
   ```bash
    $ pwd
    /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
@@ -273,14 +273,14 @@
    </details>
 
 - Same, way we can do it for single folder as well using the command:
-  
+
   ```bash
   $ pytest folder_name -v
   ```
 
   <details>
   <summary>Example</summary>
-    
+
   ```bash
   $ pwd
   /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
@@ -353,10 +353,10 @@
   ```bash
   $ pytest folder_name/sub_folder_name/.../test_something.py::ClassName -v
   ```
-  
+
     <details>
     <summary>Example</summary>
-  
+
     ```bash
     $ pwd
     /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
@@ -423,16 +423,16 @@
     ================================================================== 3 failed, 9 passed in 0.02s ===================================================================
     ```
     </details>
-  
+
 - We can also do the same using the method name as well. Here's how you can do it:
 
   ```bash
   $ pytest folder_name/sub_folder_name/.../test_something.py::ClassName::method_name -v
   ```
-  
+
   <details>
   <summary>Example</summary>
-  
+
   ```bash
   $ pwd
   /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
@@ -447,7 +447,24 @@
 
   ======================================================================= 1 passed in 0.00s ========================================================================
   ```
+
   </details>
-  
+
   This is really helpful when you want to run a single test case from a file containing multiple test cases.
+
+<hr/>
+
+### About `__init__.py`
+
+- When we created the Python Package not a normal folder because we wanted `__init__.py` file to be created in the folder.
+- The `__init__.py` file is used to mark the directory as a Python package directory. And it let's us create same file name in multiple subdirectories.
+
+<hr/>
+
+## pytest.raises Assertion
+
+- So, basically let's say we are aware that we have a test where we know we are going to get an exception from one of our tests, and we want to test that scenario. Let's say we have a scenario where it throws an exception error like 500 internal error or something like a 400 error, and we want to test that scenario, and we know that is the correct behavior.
+- If we write it down like a normal test case the resultant will show it as a `Failure` Test Case. But, we don't want the test to fail, and want to check that API Call actually throws an exception and, we are sure that our function is working properly in that scenario as well. These kinds of exercises are highly used in Unit or Integration test scenarios where we are actually expecting
+  an exception or an anomaly from our application under test.
+- And, if we don't get the exception than in that scenario it's not correct, basically a negative true scenario. So, in that scenario if there's an Assertion error we want the test to be passed, and move ahead with the next test. If it doesnot throw any error this should fail the test.
 
