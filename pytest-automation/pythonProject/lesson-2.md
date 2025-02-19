@@ -66,7 +66,7 @@
   Now, run the following command to run the test cases and you will obtain the output as shown below:
   
     ```bash
-    $ pytest pytest-assertions -v                           ✔  pythonProject   at 00:34:53  
+    $ pytest pytest-assertions -v
     ====================================================================== test session starts =======================================================================
     platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
     cachedir: .pytest_cache
