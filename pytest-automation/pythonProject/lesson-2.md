@@ -133,3 +133,308 @@
     FAILED pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
     ================================================================== 3 failed, 9 passed in 0.02s ===================================================================
     ```
+  
+## Test Discovery with Pytest
+
+- Pytest provides a way to discover and run the test cases in a directory.
+- Pytest will look for the files with the name `test_*.py` or `*_test.py`, classes with the name `Test*` and methods with the name `test_*` and `*_test`.
+- Pytest will run the test cases in the order they are discovered, in parallel by default.
+
+- Based on out folder structure, if we run the `pytest` command from `pythonProject` folder. It will execute all the test cases in all the underlying files following the conventions.
+  Here's an example of that:
+
+    ```bash
+    $  pytest -v                                                     ✔  pythonProject   at 03:56:19  
+    ====================================================================== test session starts =======================================================================
+    platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+    cachedir: .pytest_cache
+    rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+    collected 15 items                                                                                                                                               
+    
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[9-5] PASSED                                                                      [  6%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] FAILED                                                                      [ 13%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-4] PASSED                                                                      [ 20%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[10-5] PASSED                                                                     [ 26%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_true PASSED                                                                              [ 33%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_cmpr_string_char PASSED                                                                  [ 40%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[9-5] PASSED                                                                       [ 46%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] FAILED                                                                       [ 53%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-4] PASSED                                                                       [ 60%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] FAILED                                                                      [ 66%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_find_in_string PASSED                                                                    [ 73%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_is_not_in_string PASSED                                                                  [ 80%]
+    pytest-topics/test_module01.py::test_addition PASSED                                                                                                       [ 86%]
+    pytest-topics/test_module01.py::test_subtraction FAILED                                                                                                    [ 93%]
+    pytest-topics/test_module01.py::test_integer_division PASSED                                                                                               [100%]
+    
+    ============================================================================ FAILURES ============================================================================
+    __________________________________________________________________ TestCases.test_greater[5-9] ___________________________________________________________________
+    
+    self = <test_module02.TestCases object at 0x1019b2190>, a = 5, b = 9
+    
+        @pytest.mark.parametrize("a, b", testset)
+        def test_greater(self,a,b):
+    >       assert a > b, f"{a} is not greater than {b}"
+    E       AssertionError: 5 is not greater than 9
+    E       assert 5 > 9
+    
+    pytest-topics/pytest-assertions/test_module02.py:10: AssertionError
+    ___________________________________________________________________ TestCases.test_divmod[5-9] ___________________________________________________________________
+    
+    self = <test_module02.TestCases object at 0x1019c0810>, a = 5, b = 9
+    
+        @pytest.mark.parametrize("a, b", testset)
+        def test_divmod(self,a,b):
+    >       assert 1 in divmod(a,b), f"1 is not in divmod({a},{b})"
+    E       AssertionError: 1 is not in divmod(5,9)
+    E       assert 1 in (0, 5)
+    E        +  where (0, 5) = divmod(5, 9)
+    
+    pytest-topics/pytest-assertions/test_module02.py:20: AssertionError
+    __________________________________________________________________ TestCases.test_divmod[10-5] ___________________________________________________________________
+    
+    self = <test_module02.TestCases object at 0x1019c0d10>, a = 10, b = 5
+    
+        @pytest.mark.parametrize("a, b", testset)
+        def test_divmod(self,a,b):
+    >       assert 1 in divmod(a,b), f"1 is not in divmod({a},{b})"
+    E       AssertionError: 1 is not in divmod(10,5)
+    E       assert 1 in (2, 0)
+    E        +  where (2, 0) = divmod(10, 5)
+    
+    pytest-topics/pytest-assertions/test_module02.py:20: AssertionError
+    ________________________________________________________________________ test_subtraction ________________________________________________________________________
+    
+        def test_subtraction():
+    >       assert 5 - 5 != 0, "Intentional failure 1"
+    E       AssertionError: Intentional failure 1
+    E       assert (5 - 5) != 0
+    
+    pytest-topics/test_module01.py:6: AssertionError
+    ==================================================================== short test summary info =====================================================================
+    FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] - AssertionError: 5 is not greater than 9
+    FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] - AssertionError: 1 is not in divmod(5,9)
+    FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
+    FAILED pytest-topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
+    ================================================================== 4 failed, 11 passed in 0.03s ==================================================================
+    ```
+  
+    Here, we can see that all the test cases in the directory are executed in the order they are discovered. The failed test cases are also shown in the output.
+
+    For the record, we actually have a total of 15 testcases as of now. Now, you must be thinking how:
+    - We have 3 testcases in `test_module01.py` file.
+    - We have 12 testcases in `test_module02.py` file. Out of which: 
+      - 4 are constant `True` testcases.
+      - 4 are `greater` testcases.
+      - 4 are `divmod` testcases.
+
+- We can also run pytests for a single file using the following command:
+
+  ```bash
+  $ pytest folder_name/sub_folder_name/.../test_something.py -v
+  ```
+  
+  Example:
+  
+  ```bash
+   $ pwd
+   /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+
+   $ pytest pytest-topics/test_module01.py -v 
+   ====================================================================== test session starts =======================================================================
+   platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+   cachedir: .pytest_cache
+   rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+   collected 3 items                                                                                                                                                
+
+   pytest-topics/test_module01.py::test_addition PASSED                                                                                                       [ 33%]
+   pytest-topics/test_module01.py::test_subtraction FAILED                                                                                                    [ 66%]
+   pytest-topics/test_module01.py::test_integer_division PASSED                                                                                               [100%]
+
+   ============================================================================ FAILURES ============================================================================
+   ________________________________________________________________________ test_subtraction ________________________________________________________________________
+
+   def test_subtraction():
+   >       assert 5 - 5 != 0, "Intentional failure 1"
+   E       AssertionError: Intentional failure 1
+   E       assert (5 - 5) != 0
+
+   pytest-topics/test_module01.py:6: AssertionError
+   ==================================================================== short test summary info =====================================================================
+   FAILED pytest-topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
+   ================================================================== 1 failed, 2 passed in 0.01s ===================================================================
+   ```
+
+- Same, way we can do it for single folder as well using the command:
+  
+  ```bash
+  $ pytest folder_name -v
+  ```
+  
+  Example:
+    
+  ```bash
+  $ pwd
+  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  $  pytest pytest-topics/pytest-assertions -v                     ✔  pythonProject   at 04:09:52  
+  ====================================================================== test session starts =======================================================================
+  platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  collected 12 items                                                                                                                                               
+
+  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[9-5] PASSED                                                                      [  8%]
+  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] FAILED                                                                      [ 16%]
+  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-4] PASSED                                                                      [ 25%]
+  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[10-5] PASSED                                                                     [ 33%]
+  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_true PASSED                                                                              [ 41%]
+  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_cmpr_string_char PASSED                                                                  [ 50%]
+  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[9-5] PASSED                                                                       [ 58%]
+  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] FAILED                                                                       [ 66%]
+  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-4] PASSED                                                                       [ 75%]
+  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] FAILED                                                                      [ 83%]
+  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_find_in_string PASSED                                                                    [ 91%]
+  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_is_not_in_string PASSED                                                                  [100%]
+
+  ============================================================================ FAILURES ============================================================================
+  __________________________________________________________________ TestCases.test_greater[5-9] ___________________________________________________________________
+
+  self = <test_module02.TestCases object at 0x1053f94d0>, a = 5, b = 9
+
+  @pytest.mark.parametrize("a, b", testset) 
+  def test_greater(self,a,b):
+  >       assert a > b, f"{a} is not greater than {b}"
+  E       AssertionError: 5 is not greater than 9
+  E       assert 5 > 9
+
+  pytest-topics/pytest-assertions/test_module02.py:10: AssertionError
+  ___________________________________________________________________ TestCases.test_divmod[5-9] ___________________________________________________________________
+
+  self = <test_module02.TestCases object at 0x105408650>, a = 5, b = 9
+
+  @pytest.mark.parametrize("a, b", testset)
+  def test_divmod(self,a,b):
+  >       assert 1 in divmod(a,b), f"1 is not in divmod({a},{b})"
+  E       AssertionError: 1 is not in divmod(5,9)
+  E       assert 1 in (0, 5)
+  E        +  where (0, 5) = divmod(5, 9)
+
+  pytest-topics/pytest-assertions/test_module02.py:20: AssertionError
+  __________________________________________________________________ TestCases.test_divmod[10-5] ___________________________________________________________________
+
+  self = <test_module02.TestCases object at 0x105408b50>, a = 10, b = 5
+
+  @pytest.mark.parametrize("a, b", testset) 
+  def test_divmod(self,a,b):
+  >       assert 1 in divmod(a,b), f"1 is not in divmod({a},{b})"
+  E       AssertionError: 1 is not in divmod(10,5)
+  E       assert 1 in (2, 0)
+  E        +  where (2, 0) = divmod(10, 5)
+
+  pytest-topics/pytest-assertions/test_module02.py:20: AssertionError
+  ==================================================================== short test summary info =====================================================================
+  FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] - AssertionError: 5 is not greater than 9
+  FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] - AssertionError: 1 is not in divmod(5,9)
+  FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
+  ================================================================== 3 failed, 9 passed in 0.02s ===================================================================
+  ```
+
+- The surprising part is we can run pytest using class name as well. Here's how you can do it:
+
+  ```bash
+  $ pytest folder_name/sub_folder_name/.../test_something.py::ClassName -v
+  ```
+  
+  Example:
+  
+    ```bash
+    $ pwd
+    /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+    $ pytest pytest-topics/pytest-assertions/test_module02.py::TestCases -v
+    ====================================================================== test session starts =======================================================================
+    platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+    cachedir: .pytest_cache
+    rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+    collected 12 items                                                                                                                                               
+    
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[9-5] PASSED                                                                      [  8%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] FAILED                                                                      [ 16%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-4] PASSED                                                                      [ 25%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[10-5] PASSED                                                                     [ 33%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_true PASSED                                                                              [ 41%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_cmpr_string_char PASSED                                                                  [ 50%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[9-5] PASSED                                                                       [ 58%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] FAILED                                                                       [ 66%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-4] PASSED                                                                       [ 75%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] FAILED                                                                      [ 83%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_find_in_string PASSED                                                                    [ 91%]
+    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_is_not_in_string PASSED                                                                  [100%]
+    
+    ============================================================================ FAILURES ============================================================================
+    __________________________________________________________________ TestCases.test_greater[5-9] ___________________________________________________________________
+    
+    self = <test_module02.TestCases object at 0x105d4d990>, a = 5, b = 9
+    
+        @pytest.mark.parametrize("a, b", testset)
+        def test_greater(self,a,b):
+    >       assert a > b, f"{a} is not greater than {b}"
+    E       AssertionError: 5 is not greater than 9
+    E       assert 5 > 9
+    
+    pytest-topics/pytest-assertions/test_module02.py:10: AssertionError
+    ___________________________________________________________________ TestCases.test_divmod[5-9] ___________________________________________________________________
+    
+    self = <test_module02.TestCases object at 0x105d4ff50>, a = 5, b = 9
+    
+        @pytest.mark.parametrize("a, b", testset)
+        def test_divmod(self,a,b):
+    >       assert 1 in divmod(a,b), f"1 is not in divmod({a},{b})"
+    E       AssertionError: 1 is not in divmod(5,9)
+    E       assert 1 in (0, 5)
+    E        +  where (0, 5) = divmod(5, 9)
+    
+    pytest-topics/pytest-assertions/test_module02.py:20: AssertionError
+    __________________________________________________________________ TestCases.test_divmod[10-5] ___________________________________________________________________
+    
+    self = <test_module02.TestCases object at 0x105d58490>, a = 10, b = 5
+    
+        @pytest.mark.parametrize("a, b", testset)
+        def test_divmod(self,a,b):
+    >       assert 1 in divmod(a,b), f"1 is not in divmod({a},{b})"
+    E       AssertionError: 1 is not in divmod(10,5)
+    E       assert 1 in (2, 0)
+    E        +  where (2, 0) = divmod(10, 5)
+    
+    pytest-topics/pytest-assertions/test_module02.py:20: AssertionError
+    ==================================================================== short test summary info =====================================================================
+    FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] - AssertionError: 5 is not greater than 9
+    FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] - AssertionError: 1 is not in divmod(5,9)
+    FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
+    ================================================================== 3 failed, 9 passed in 0.02s ===================================================================
+    ```
+  
+- We can also do the same using the method name as well. Here's how you can do it:
+
+  ```bash
+  $ pytest folder_name/sub_folder_name/.../test_something.py::ClassName::method_name -v
+  ```
+  
+  Example:
+  
+  ```bash
+  $ pwd
+  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  $  pytest pytest-topics/test_module01.py::test_addition -v
+  ====================================================================== test session starts =======================================================================
+  platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  collected 1 item                                                                                                                                                 
+
+  pytest-topics/test_module01.py::test_addition PASSED                                                                                                       [100%]
+
+  ======================================================================= 1 passed in 0.00s ========================================================================
+  ```
+  
+  This is really helpful when you want to run a single test case from a file containing multiple test cases.
+
