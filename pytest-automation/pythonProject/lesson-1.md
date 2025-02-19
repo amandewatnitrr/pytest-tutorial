@@ -207,4 +207,25 @@
 
 > [!TIP]
 > It's always better to have everything as a python package. All the python packages will have `__init__.py` file in them. This will help in importing the modules easily.
-> <br/><br/> Whenever you create a python folder, it's always better to create this file as well within your python folders. 
+> <br/><br/> Whenever you create a python folder, it's always better to create this file as well within your python folders.
+
+<hr/>
+
+## Running Our Tests
+
+- So, far we have been using the terminal to run the pytest commands. We can also do the same using the Pycharm IDE.
+- Go to settings, and search for `test` keyword in the search bar.<br/><br/>
+  
+  ![](./imgs/Screenshot%202025-02-19%20at%209.31.43%E2%80%AFPM.png)
+
+- You will see `Python Integrated Tools` in the search results in the `tools` section. Click on it.<br/><br/>
+  
+  ![](./imgs/Screenshot%202025-02-19%20at%209.32.32%E2%80%AFPM.png)
+
+- Click on the dropdown for `Default test runner` and select `pytest` from the dropdown.<br/><br/>
+- Now, bring your cursor on the first line of the file and right-click. You will see an option to run the test.<br/><br/>
+  
+  ![](./imgs/Screenshot%202025-02-19%20at%209.35.28%E2%80%AFPM.png)
+
+- Click on the `Run 'pytest in test_module01'` option.<br/><br/>
+
