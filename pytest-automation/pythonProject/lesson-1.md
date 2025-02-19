@@ -203,3 +203,8 @@
 > [!IMPORTANT]
 > The file name should follow the naming convention `test_something.py` and the test function should follow the naming convention `test_function_name()`.
 > On, the similar note the test class should follow the naming convention `class TestClassName:` followed by the test functions conventions mentioned before.
+
+
+> [!TIP]
+> It's always better to have everything as a python package. All the python packages will have `__init__.py` file in them. This will help in importing the modules easily.
+> <br/><br/> Whenever you create a python folder, it's always better to create this file as well within your python folders. 
