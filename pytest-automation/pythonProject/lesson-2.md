@@ -4,10 +4,15 @@
 
 ## Assertions & Class Based Test Cases
 
+
+### Assertions
+
 - Assertions are way of validating our tests. They are the main component of the test.
 - Unless you validate what you are exepcting, you can't be sure if your test is passing or failing.
 - The `assert` statement is from the Python library and is used to verify the correctness of the code, unlike the `unittest` module which comes as a part of the Python standard library.
 - The `assert` statement is used to check the condition. If the condition is `True`, the program will continue to execute. If the condition is `False`, the program will raise an `AssertionError` exception.<br/> <br/>
+
+### Classes
 
 - Class based test cases are used to group similar test cases together. This makes it easier to manage and run the test cases.
 - Class is a blueprint for creating objects. It defines the attributes and methods that the objects will have.
