@@ -141,7 +141,11 @@
 - Pytest will run the test cases in the order they are discovered, in parallel by default.
 
 - Based on out folder structure, if we run the `pytest` command from `pythonProject` folder. It will execute all the test cases in all the underlying files following the conventions.
+
   Here's an example of that:
+
+    <details>
+    <summary>Example</summary>
 
     ```bash
     $  pytest -v                                                     ✔  pythonProject   at 03:56:19  
@@ -218,6 +222,7 @@
     FAILED pytest-topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
     ================================================================== 4 failed, 11 passed in 0.03s ==================================================================
     ```
+    </details>
   
     Here, we can see that all the test cases in the directory are executed in the order they are discovered. The failed test cases are also shown in the output.
 
@@ -234,7 +239,8 @@
   $ pytest folder_name/sub_folder_name/.../test_something.py -v
   ```
   
-  Example:
+  <details>
+  <summary>Example</summary>
   
   ```bash
    $ pwd
@@ -264,14 +270,16 @@
    FAILED pytest-topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
    ================================================================== 1 failed, 2 passed in 0.01s ===================================================================
    ```
+   </details>
 
 - Same, way we can do it for single folder as well using the command:
   
   ```bash
   $ pytest folder_name -v
   ```
-  
-  Example:
+
+  <details>
+  <summary>Example</summary>
     
   ```bash
   $ pwd
@@ -338,6 +346,7 @@
   FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
   ================================================================== 3 failed, 9 passed in 0.02s ===================================================================
   ```
+  </details>
 
 - The surprising part is we can run pytest using class name as well. Here's how you can do it:
 
@@ -345,7 +354,8 @@
   $ pytest folder_name/sub_folder_name/.../test_something.py::ClassName -v
   ```
   
-  Example:
+    <details>
+    <summary>Example</summary>
   
     ```bash
     $ pwd
@@ -412,6 +422,7 @@
     FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
     ================================================================== 3 failed, 9 passed in 0.02s ===================================================================
     ```
+    </details>
   
 - We can also do the same using the method name as well. Here's how you can do it:
 
@@ -419,7 +430,8 @@
   $ pytest folder_name/sub_folder_name/.../test_something.py::ClassName::method_name -v
   ```
   
-  Example:
+  <details>
+  <summary>Example</summary>
   
   ```bash
   $ pwd
@@ -435,6 +447,7 @@
 
   ======================================================================= 1 passed in 0.00s ========================================================================
   ```
+  </details>
   
   This is really helpful when you want to run a single test case from a file containing multiple test cases.
 
