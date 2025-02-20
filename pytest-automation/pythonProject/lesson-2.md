@@ -464,7 +464,9 @@
 ## pytest.raises Assertion
 
 - So, basically let's say we are aware that we have a test where we know we are going to get an exception from one of our tests, and we want to test that scenario. Let's say we have a scenario where it throws an exception error like 500 internal error or something like a 400 error, and we want to test that scenario, and we know that is the correct behavior.
+
 - If we write it down like a normal test case the resultant will show it as a `Failure` Test Case. But, we don't want the test to fail, and want to check that API Call actually throws an exception and, we are sure that our function is working properly in that scenario as well. These kinds of exercises are highly used in Unit or Integration test scenarios where we are actually expecting
   an exception or an anomaly from our application under test.
+
 - And, if we don't get the exception than in that scenario it's not correct, basically a negative true scenario. So, in that scenario if there's an Assertion error we want the test to be passed, and move ahead with the next test. If it doesnot throw any error this should fail the test.
 
