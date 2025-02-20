@@ -470,3 +470,202 @@
 
 - And, if we don't get the exception than in that scenario it's not correct, basically a negative true scenario. So, in that scenario if there's an Assertion error we want the test to be passed, and move ahead with the next test. If it doesnot throw any error this should fail the test.
 
+- Let's understand this through an example: 
+  
+  ```python
+  import pytest
+  
+  def test_testing():
+      with pytest.raises(Exception):
+          assert (1/0), f"ZeroDivisionError"
+  ```
+
+  Now, run the `pytest` command and inspect the output:
+
+  ```bash
+  pytest -v pytest-topics/pytest-assertions/test_module03.py 
+  =================================================================== test session starts ====================================================================
+  platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  plugins: django-4.5.2
+  collected 1 item                                                                                                                                           
+  
+  pytest-topics/pytest-assertions/test_module03.py::test_testing PASSED                                                                                [100%]
+  
+  ==================================================================== 1 passed in 0.01s =====================================================================
+  ```
+
+  We can clearly see that the test case is passed even though this is an exceptional case.
+
+- Let's take another great example:
+
+  `test_module03.py`
+
+  ```python
+  import pytest
+  import re
+  import requests
+  
+  testset = [(1,2),(2,1)]
+  
+  class TestCases:
+      def test_zero_divisibility(self):
+          with pytest.raises(Exception):
+              assert (1/0)
+  
+      @pytest.mark.parametrize("a, b", testset)
+      def test_equation(self,a,b):
+          summ = a+b
+          diff = a-b
+          asq = a*a
+          bsq = b*b
+          lhs = summ * diff
+          rhs = asq - bsq
+          assert lhs == rhs
+  
+      def test_404(self):
+          with pytest.raises(Exception):
+              assert requests.get("https://httpbin.org/status/404"), f"404 Response Code"
+  
+      def run_tests(self):
+          self.test_zero_divisibility()
+          self.test_404()
+  
+          for a,b in testset:
+              try:
+                  self.test_equation(a,b)
+              except AssertionError as e:
+                  print(f"AssertionError: {e}")
+  
+  if __name__ == '__main__':
+      test = TestCases()
+      test.run_tests()
+  ```
+  
+  Now, run the command `pytest`, and inspect the output:
+
+  ```bash
+  $  pytest -v pytest-topics/pytest-assertions/test_module03.py
+  =================================================================== test session starts ====================================================================
+  platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  collected 4 items                                                                                                                                          
+
+  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_zero_divisibility PASSED                                                           [ 25%]
+  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_equation[1-2] PASSED                                                               [ 50%]
+  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_equation[2-1] PASSED                                                               [ 75%]
+  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_404 PASSED                                                                         [100%]
+
+  ==================================================================== 4 passed in 1.35s =====================================================================
+  ```
+  
+- We can also inspect the exception that came out of our test, and we want to assert on that exception, for that let's write another test case.
+
+  ```python
+  def test_tuple_cmpr(self):
+    with pytest.raises(Exception) as e:
+        assert (1,2,3) == (1,2,4)
+    print(e)
+  ```
+  
+  If you execute pytest command and specifically run this test, you will get the following output:
+
+  ```bash
+  $ pytest
+  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pycharm/_jb_pytest_runner.py --target test_module03.py::TestCases.test_tuple_cmpr 
+  Testing started at 7:51 am ...
+  Launching pytest with arguments test_module03.py::TestCases::test_tuple_cmpr --no-header --no-summary -q in /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/pytest-assertions
+  
+  ============================= test session starts ==============================
+  collecting ... collected 1 item
+  
+  test_module03.py::TestCases::test_tuple_cmpr PASSED                      [100%]<ExceptionInfo AssertionError('assert (1, 2, 3) == (1, 2, 4)\n  \n  At index 2 diff: 3 != 4\n  \n  Full diff:\n    (\n        1,\n        2,\n  -     4,\n  ?     ^\n  +     3,\n  ?     ^\n    )') tblen=1>
+  
+  
+  ============================== 1 passed in 0.07s ===============================
+  
+  Process finished with exit code 0
+  ```
+
+  And, here we get the line `<ExceptionInfo AssertionError('assert (1, 2, 3) == (1, 2, 4)\n  \n  At index 2 diff: 3 != 4\n  \n  Full diff:\n    (\n        1,\n        2,\n  -     4,\n  ?     ^\n  +     3,\n  ?     ^\n    )') tblen=1>` clearly specifying the error.
+
+- Let's say we have another exception being raised by a different function, we can also assert that as well, and assert that, we can do it as follows:
+
+  ```python
+  import pytest
+  import re
+  import requests
+  
+  testset = [(1,2),(2,1)]
+  
+  def func1():
+      raise ValueError("Exception func1")
+  
+  class TestCases:
+      def test_zero_divisibility(self):
+          with pytest.raises(Exception):
+              assert (1/0)
+  
+      @pytest.mark.parametrize("a, b", testset)
+      def test_equation(self,a,b):
+          summ = a+b
+          diff = a-b
+          asq = a*a
+          bsq = b*b
+          lhs = summ * diff
+          rhs = asq - bsq
+          assert lhs == rhs
+  
+      def test_404(self):
+          with pytest.raises(Exception):
+              assert requests.get("https://httpbin.org/status/404"), f"404 Response Code"
+  
+      def test_error_assert(self):
+          with pytest.raises(Exception) as e:
+              func1()
+          print(str(e))
+          assert (str(e.value)) == "Exception func1"
+  
+      def test_tuple_cmpr(self):
+          with pytest.raises(Exception) as e:
+              assert (1,2,3) == (1,2,4)
+  
+      def run_tests(self):
+          self.test_zero_divisibility()
+          self.test_404()
+  
+          for a,b in testset:
+              try:
+                  self.test_equation(a,b)
+              except AssertionError as e:
+                  print(f"AssertionError: {e}")
+  
+  if __name__ == '__main__':
+      test = TestCases()
+      test.run_tests()  
+  ```
+  
+  Run the command `pytest` and inspect the output:
+
+  ```bash
+  $ pytest -v ./pytest-topics/pytest-assertions/test_module03.py
+  =================================================================== test session starts ====================================================================
+  platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  plugins: django-4.5.2
+  collected 6 items                                                                                                                                          
+  
+  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_zero_divisibility PASSED                                                           [ 16%]
+  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_equation[1-2] PASSED                                                               [ 33%]
+  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_equation[2-1] PASSED                                                               [ 50%]
+  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_404 PASSED                                                                         [ 66%]
+  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_error_assert PASSED                                                                [ 83%]
+  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_tuple_cmpr PASSED                                                                  [100%]
+  
+  ==================================================================== 6 passed in 1.34s =====================================================================
+  ```
+  
+  Hence, we can also raise our own ValueError and assert it, and pass the test case.
