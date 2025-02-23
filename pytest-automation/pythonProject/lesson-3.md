@@ -340,4 +340,214 @@
   
 ### Module Level Markers and Disable Warnings
 
-- 
+- We can also mark the entire module with a marker, and then run the tests based on the module level marker.
+- We can mark the module using the following syntax. This must be done at the top of the file:
+
+  ```python
+  pytestmark = [pytest.mark.<marker_name>, pytest.mark.<another_marker_name>,...]
+  ```
+  
+- Let's learn this through this example:
+
+	```python
+	import sys
+	import pytest
+	import requests
+	
+	pytestmark = [pytest.mark.markerr,pytest.mark.temp_conversion, pytest.mark.str_test]
+	
+	# Corrected testset (fixed last entry and added missing Celsius value)
+	cent = [8, 42, 100, 23, 35]
+	faren = [46.4, 107.6, 212.0, 73.4, 95.0]
+	CONVERSION_CONST = 9/5  # Constants in uppercase
+	testset = zip(cent,faren)
+	
+	class TestCases:
+	
+	    @staticmethod
+	    def cent_to_faren(cent=0):
+	        """Static method for conversion"""
+	        return (cent * CONVERSION_CONST) + 32
+	
+	    @pytest.mark.temp_conversion
+	    @pytest.mark.parametrize("cent,expected", zip(cent, faren))
+	    def test_conversion(self, cent, expected):
+	        """Test conversion with various values"""
+	        result = self.cent_to_faren(cent)
+	        # Use pytest.approx for floating point comparisons
+	        assert result == pytest.approx(expected, rel=1e-3)
+	
+	    @pytest.mark.temp_conversion
+	    def test_no_input(self):
+	        """Test default parameter value"""
+	        assert self.cent_to_faren() == 32
+	
+	    @pytest.mark.skip(reason="Skipping Test")
+	    @pytest.mark.parametrize("temperature", cent)
+	    def test_datatype_confirm_float(self, temperature):
+	        """Test return type is float"""
+	        result = self.cent_to_faren(temperature)
+	        assert type(result) == float
+	
+	    @pytest.mark.skipif(sys.version_info > (3,6),reason="Don't execute this for python version above 3.8")
+	    def test_404(self):
+	        with pytest.raises(Exception):
+	            assert requests.get("https://httpbin.org/status/404"), f"404 Response Code"
+	
+	    @pytest.mark.str_test
+	    def test_str_slice(self):
+	        letters = 'abcdefghijklmnopqrstuvwxyz'
+	        assert letters[:3] == 'abc'
+	        assert letters[-3:] == 'xyz'
+	        assert letters[:21:5] == 'afkpu'
+	        assert letters[::-1] == 'zyxwvutsrqponmlkjihgfedcba'
+	
+	    @pytest.mark.str_test
+	    def test_str_split(self):
+	        s = "My name is Aman and, I am a Python Developer"
+	        assert s.split() == ['My', 'name', 'is', 'Aman', 'and,', 'I', 'am', 'a', 'Python', 'Developer']
+	        assert s.split(',') == ['My name is Aman and', ' I am a Python Developer']
+	
+	    def run_tests(self):
+	
+	        self.test_no_input()
+	        self.test_404()
+	        self.test_str_slice()
+	        self.test_str_split()
+	        for a,b in testset:
+	            self.test_conversion(a,b)
+	
+	if __name__ == '__main__':
+	    # Run pytest programmatically (no need for custom test runner)
+	    test = TestCases()
+	    test.run_tests()
+	```
+ 
+	Now, run the following command:
+
+	```bash
+ 	$ pytest -v -m markerr
+	```
+ 
+	This will run the whole module, as it is marked with `@pytest.mark.markerr`. And, below is the output:
+
+	```bash
+	$ pytest -v -m markerr                            ✔  pythonProject   at 23:00:21  
+	=============================================================== test session starts ================================================================
+	platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+	cachedir: .pytest_cache
+	rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+	collected 47 items / 33 deselected / 14 selected                                                                                                   
+	
+	pytest-topics/test_marker_skip.py::TestCases::test_conversion[8-46.4] PASSED                                                                 [  7%]
+	pytest-topics/test_marker_skip.py::TestCases::test_conversion[42-107.6] PASSED                                                               [ 14%]
+	pytest-topics/test_marker_skip.py::TestCases::test_conversion[100-212.0] PASSED                                                              [ 21%]
+	pytest-topics/test_marker_skip.py::TestCases::test_conversion[23-73.4] PASSED                                                                [ 28%]
+	pytest-topics/test_marker_skip.py::TestCases::test_conversion[35-95.0] PASSED                                                                [ 35%]
+	pytest-topics/test_marker_skip.py::TestCases::test_no_input PASSED                                                                           [ 42%]
+	pytest-topics/test_marker_skip.py::TestCases::test_datatype_confirm_float[8] SKIPPED (Skipping Test)                                         [ 50%]
+	pytest-topics/test_marker_skip.py::TestCases::test_datatype_confirm_float[42] SKIPPED (Skipping Test)                                        [ 57%]
+	pytest-topics/test_marker_skip.py::TestCases::test_datatype_confirm_float[100] SKIPPED (Skipping Test)                                       [ 64%]
+	pytest-topics/test_marker_skip.py::TestCases::test_datatype_confirm_float[23] SKIPPED (Skipping Test)                                        [ 71%]
+	pytest-topics/test_marker_skip.py::TestCases::test_datatype_confirm_float[35] SKIPPED (Skipping Test)                                        [ 78%]
+	pytest-topics/test_marker_skip.py::TestCases::test_404 SKIPPED (Don't execute this for python version above 3.8)                             [ 85%]
+	pytest-topics/test_marker_skip.py::TestCases::test_str_slice PASSED                                                                          [ 92%]
+	pytest-topics/test_marker_skip.py::TestCases::test_str_split PASSED                                                                          [100%]
+	
+	================================================================= warnings summary =================================================================
+	pytest-topics/pytest-assertions/test_module02.py:15
+	  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/pytest-assertions/test_module02.py:15: PytestUnknownMarkWarning: Unknown pytest.mark.str_test - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+	    @pytest.mark.str_test
+	
+	pytest-topics/pytest-assertions/test_module02.py:23
+	  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/pytest-assertions/test_module02.py:23: PytestUnknownMarkWarning: Unknown pytest.mark.str_test - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+	    @pytest.mark.str_test
+	
+	pytest-topics/pytest-assertions/test_module02.py:27
+	  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/pytest-assertions/test_module02.py:27: PytestUnknownMarkWarning: Unknown pytest.mark.str_test - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+	    @pytest.mark.str_test
+	
+	pytest-topics/test_marker_skip.py:5
+	  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_marker_skip.py:5: PytestUnknownMarkWarning: Unknown pytest.mark.markerr - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+	    pytestmark = [pytest.mark.markerr,pytest.mark.temp_conversion, pytest.mark.str_test]
+	
+	pytest-topics/test_marker_skip.py:5
+	  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_marker_skip.py:5: PytestUnknownMarkWarning: Unknown pytest.mark.temp_conversion - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+	    pytestmark = [pytest.mark.markerr,pytest.mark.temp_conversion, pytest.mark.str_test]
+	
+	pytest-topics/test_marker_skip.py:5
+	  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_marker_skip.py:5: PytestUnknownMarkWarning: Unknown pytest.mark.str_test - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+	    pytestmark = [pytest.mark.markerr,pytest.mark.temp_conversion, pytest.mark.str_test]
+	
+	pytest-topics/test_marker_skip.py:20
+	  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_marker_skip.py:20: PytestUnknownMarkWarning: Unknown pytest.mark.temp_conversion - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+	    @pytest.mark.temp_conversion
+	
+	pytest-topics/test_marker_skip.py:28
+	  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_marker_skip.py:28: PytestUnknownMarkWarning: Unknown pytest.mark.temp_conversion - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+	    @pytest.mark.temp_conversion
+	
+	pytest-topics/test_marker_skip.py:45
+	  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_marker_skip.py:45: PytestUnknownMarkWarning: Unknown pytest.mark.str_test - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+	    @pytest.mark.str_test
+	
+	pytest-topics/test_marker_skip.py:53
+	  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_marker_skip.py:53: PytestUnknownMarkWarning: Unknown pytest.mark.str_test - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+	    @pytest.mark.str_test
+	
+	-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+	============================================= 8 passed, 6 skipped, 33 deselected, 10 warnings in 0.07s ==============================================
+    ```
+
+#### Disabling Warnings
+
+- Now, in the above output, you can see that there are some warnings, which are not useful for us.
+- This is happening because the markers are not defined in the pytest config file.
+- So, we can disable it by creating a file named `pytest.ini` in the root directory of the project.
+- And, then add the following content to the file:
+
+  ```ini
+  [pytest]
+  markers =
+	  temp_conversion: Test cases for temperature conversion
+	  str_test: Test cases for string slicing and splitting
+	  markerr: Test cases for Marker Tutorial
+  ```
+
+- Now, if we run the same command:
+
+  ```bash
+  $ pytest -v -m markerr
+  ```
+  
+  The output will be:
+
+    ```bash
+  	$ pytest -v -m markerr 
+	=============================================================== test session starts ================================================================
+	platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+	cachedir: .pytest_cache
+	rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+	configfile: pytest.ini
+	plugins: django-4.5.2
+	collected 47 items / 33 deselected / 14 selected                                                                                                   
+	
+	pytest-topics/test_marker_skip.py::TestCases::test_conversion[8-46.4] PASSED                                                                 [  7%]
+	pytest-topics/test_marker_skip.py::TestCases::test_conversion[42-107.6] PASSED                                                               [ 14%]
+	pytest-topics/test_marker_skip.py::TestCases::test_conversion[100-212.0] PASSED                                                              [ 21%]
+	pytest-topics/test_marker_skip.py::TestCases::test_conversion[23-73.4] PASSED                                                                [ 28%]
+	pytest-topics/test_marker_skip.py::TestCases::test_conversion[35-95.0] PASSED                                                                [ 35%]
+	pytest-topics/test_marker_skip.py::TestCases::test_no_input PASSED                                                                           [ 42%]
+	pytest-topics/test_marker_skip.py::TestCases::test_datatype_confirm_float[8] SKIPPED (Skipping Test)                                         [ 50%]
+	pytest-topics/test_marker_skip.py::TestCases::test_datatype_confirm_float[42] SKIPPED (Skipping Test)                                        [ 57%]
+	pytest-topics/test_marker_skip.py::TestCases::test_datatype_confirm_float[100] SKIPPED (Skipping Test)                                       [ 64%]
+	pytest-topics/test_marker_skip.py::TestCases::test_datatype_confirm_float[23] SKIPPED (Skipping Test)                                        [ 71%]
+	pytest-topics/test_marker_skip.py::TestCases::test_datatype_confirm_float[35] SKIPPED (Skipping Test)                                        [ 78%]
+	pytest-topics/test_marker_skip.py::TestCases::test_404 SKIPPED (Don't execute this for python version above 3.8)                             [ 85%]
+	pytest-topics/test_marker_skip.py::TestCases::test_str_slice PASSED                                                                          [ 92%]
+	pytest-topics/test_marker_skip.py::TestCases::test_str_split PASSED                                                                          [100%]
+	
+	=================================================== 8 passed, 6 skipped, 33 deselected in 0.10s ====================================================
+    ```
+  
+  And, you can see that the warnings are not there anymore.

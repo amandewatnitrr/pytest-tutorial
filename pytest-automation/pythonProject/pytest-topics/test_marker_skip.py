@@ -1,7 +1,8 @@
 import sys
-
 import pytest
 import requests
+
+pytestmark = [pytest.mark.markerr,pytest.mark.temp_conversion, pytest.mark.str_test]
 
 # Corrected testset (fixed last entry and added missing Celsius value)
 cent = [8, 42, 100, 23, 35]
@@ -58,6 +59,9 @@ class TestCases:
     def run_tests(self):
 
         self.test_no_input()
+        self.test_404()
+        self.test_str_slice()
+        self.test_str_split()
         for a,b in testset:
             self.test_conversion(a,b)
 
