@@ -41,6 +41,7 @@ class TestCases:
         with pytest.raises(Exception):
             assert requests.get("https://httpbin.org/status/404"), f"404 Response Code"
 
+    @pytest.mark.str_test
     def test_str_slice(self):
         letters = 'abcdefghijklmnopqrstuvwxyz'
         assert letters[:3] == 'abc'
@@ -48,6 +49,7 @@ class TestCases:
         assert letters[:21:5] == 'afkpu'
         assert letters[::-1] == 'zyxwvutsrqponmlkjihgfedcba'
 
+    @pytest.mark.str_test
     def test_str_split(self):
         s = "My name is Aman and, I am a Python Developer"
         assert s.split() == ['My', 'name', 'is', 'Aman', 'and,', 'I', 'am', 'a', 'Python', 'Developer']

@@ -12,6 +12,7 @@ class TestCases:
     def test_true(self):
         assert 1
 
+    @pytest.mark.str_test
     def test_cmpr_string_char(self):
         assert 'ab' == "ab"
 
@@ -19,9 +20,11 @@ class TestCases:
     def test_divmod(self,a,b):
         assert 1 in divmod(a,b), f"1 is not in divmod({a},{b})"
 
+    @pytest.mark.str_test
     def test_find_in_string(self):
         assert 'py' in 'This is pytest.'
 
+    @pytest.mark.str_test
     def test_is_not_in_string(self):
         assert 'put' not in 'This is pytest.'
 

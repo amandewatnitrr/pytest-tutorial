@@ -298,3 +298,46 @@
       ```
     
 	You can clearly see, that only the tests marked with `@pytest.mark.temp_conversion` are executed. And, no other tests are executed.
+
+### Running Multiple Marked Tests
+
+- Now, once we know how to run marked tests, let's see how to run multiple marked tests.
+- We can avoid running certain marked test cases using the command:
+
+  ```bash
+  $ pytest -v -m "not <marker_name>"
+  ```
+
+- If you want to run a certain mark but avoid running another, you can use the following command:
+
+  ```bash
+  $ pytest -v -m "<marker_name> and not <another_marker_name>"
+  ```
+  
+- We can also run two different marked tests using the following command:
+
+  ```bash
+  $ pytest -v -m "<marker_name> or <another_marker_name>"
+  ```
+
+- We can run all the marked tests using the following command:
+
+  ```bash
+  $ pytest -v -m "<marker_name> or <another_marker_name> or <another_marker_name>"
+  ```
+  
+- If you want to run a single test case marked by multiple markers, you can use the following command:
+
+  ```bash
+  $ pytest -v -m "<marker_name> and <another_marker_name>"
+  ```
+  
+- If you want to run test cases, marked with multiple markers and other with single marker, you can use the following command:
+
+  ```bash
+  $ pytest -v -m "<marker_name> and <another_marker_name> or <another_marker_name>"
+  ```
+  
+### Module Level Markers and Disable Warnings
+
+- 
