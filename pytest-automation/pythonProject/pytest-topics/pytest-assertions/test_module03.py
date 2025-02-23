@@ -40,6 +40,8 @@ class TestCases:
     def run_tests(self):
         self.test_zero_divisibility()
         self.test_404()
+        self.test_tuple_cmpr()
+
 
         for a,b in testset:
             try:
