@@ -763,3 +763,69 @@
 
   Here, in this example you can clearly see that it specifies the reason for xfail, and also tested the marker against a condition, and the test case is marked as xfail.
 
+## Run Pytest by Test Name
+
+- Sometimes, we want to run a specific test case, and we don't want to run all the test cases.
+- We can do this by specifying the test case name using the `-k` flag.
+- Let's understand this through an example:
+
+  Run the command: `pytest -vk 0k "module" --tb=no`. This will only run the test cases where file name contains the keyword "module" in it.
+
+    ```bash
+    $ pytest -v -k "module" --tb=no 
+	=============================================================== test session starts ================================================================
+	platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+	cachedir: .pytest_cache
+	rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+	configfile: pytest.ini
+	collected 50 items / 15 deselected / 35 selected                                                                                                   
+	
+	pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[9-5] PASSED                                                        [  2%]
+	pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] FAILED                                                        [  5%]
+	pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-4] PASSED                                                        [  8%]
+	pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[10-5] PASSED                                                       [ 11%]
+	pytest-topics/pytest-assertions/test_module02.py::TestCases::test_true PASSED                                                                [ 14%]
+	pytest-topics/pytest-assertions/test_module02.py::TestCases::test_cmpr_string_char PASSED                                                    [ 17%]
+	pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[9-5] PASSED                                                         [ 20%]
+	pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] FAILED                                                         [ 22%]
+	pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-4] PASSED                                                         [ 25%]
+	pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] FAILED                                                        [ 28%]
+	pytest-topics/pytest-assertions/test_module02.py::TestCases::test_find_in_string PASSED                                                      [ 31%]
+	pytest-topics/pytest-assertions/test_module02.py::TestCases::test_is_not_in_string PASSED                                                    [ 34%]
+	pytest-topics/pytest-assertions/test_module03.py::TestCases::test_zero_divisibility PASSED                                                   [ 37%]
+	pytest-topics/pytest-assertions/test_module03.py::TestCases::test_equation[1-2] PASSED                                                       [ 40%]
+	pytest-topics/pytest-assertions/test_module03.py::TestCases::test_equation[2-1] PASSED                                                       [ 42%]
+	pytest-topics/pytest-assertions/test_module03.py::TestCases::test_404 PASSED                                                                 [ 45%]
+	pytest-topics/pytest-assertions/test_module03.py::TestCases::test_error_assert PASSED                                                        [ 48%]
+	pytest-topics/pytest-assertions/test_module03.py::TestCases::test_tuple_cmpr PASSED                                                          [ 51%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[8-46.4] PASSED                                                  [ 54%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[42-107.6] PASSED                                                [ 57%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[100-212.0] PASSED                                               [ 60%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[23-73.4] PASSED                                                 [ 62%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[35-95.0] PASSED                                                 [ 65%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_no_input PASSED                                                            [ 68%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[8] SKIPPED (Skipping Test)                          [ 71%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[42] SKIPPED (Skipping Test)                         [ 74%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[100] SKIPPED (Skipping Test)                        [ 77%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[23] SKIPPED (Skipping Test)                         [ 80%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[35] SKIPPED (Skipping Test)                         [ 82%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_404 SKIPPED (Don't execute this for python version above 3.8)              [ 85%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_404_xfail XFAIL (Don't execute this for python version above 3.8)          [ 88%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_no_input_xpass XPASS (Expected to fail)                                    [ 91%]
+	pytest-topics/test_module01.py::test_addition PASSED                                                                                         [ 94%]
+	pytest-topics/test_module01.py::test_subtraction FAILED                                                                                      [ 97%]
+	pytest-topics/test_module01.py::test_integer_division PASSED                                                                                 [100%]
+	
+	============================================================= short test summary info ==============================================================
+	FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] - AssertionError: 5 is not greater than 9
+	FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] - AssertionError: 1 is not in divmod(5,9)
+	FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
+	FAILED pytest-topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
+	=================================== 4 failed, 23 passed, 6 skipped, 15 deselected, 1 xfailed, 1 xpassed in 5.85s ===================================
+    ```
+  
+- `--tb=no` sets traceback to no, to avoid seeing all the unnecessary reason of errors. We can also run test case functions having specific keyword using the same command, here's the example:
+
+  ```bash
+  pytest -v -k "str" --tb=no 
+  ```
