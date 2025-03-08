@@ -39,9 +39,20 @@ class TestCases:
         with pytest.raises(Exception):
             assert requests.get("https://httpbin.org/status/404"), f"404 Response Code"
 
+    @pytest.mark.xfail(sys.version_info > (3,6),reason="Don't execute this for python version above 3.8")
+    def test_404_xfail(self):
+        assert requests.get("https://httpbin.org/status/404"), f"404 Response Code"
+
+    @pytest.mark.xfail(reason="Expected to fail")
+    def test_no_input_xpass(self):
+        """Test default parameter value"""
+        assert self.cent_to_faren() == 32
+
     def run_tests(self):
 
         self.test_no_input()
+        self.test_no_input_xpass()
+        self.test_404_xfail()
         for a,b in testset:
             self.test_conversion(a,b)
 

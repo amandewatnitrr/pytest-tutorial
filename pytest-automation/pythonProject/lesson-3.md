@@ -551,3 +551,215 @@
     ```
   
   And, you can see that the warnings are not there anymore.
+
+### xfail Markers
+
+- Sometimes, we know that a test is going to fail, and we want to mark it as expected to fail.
+- We can do this using the `@pytest.mark.xfail` decorator.
+- Let's try to understand this through an example:
+
+  For this example, we have added a test case, which is expected to fail. And, we have marked it with `@pytest.mark.xfail`.
+  
+    ```python
+    import sys
+	import pytest
+	import requests
+	
+	# Corrected testset (fixed last entry and added missing Celsius value)
+	cent = [8, 42, 100, 23, 35]
+	faren = [46.4, 107.6, 212.0, 73.4, 95.0]
+	CONVERSION_CONST = 9/5  # Constants in uppercase
+	testset = zip(cent,faren)
+	
+	class TestCases:
+	
+	    @staticmethod
+	    def cent_to_faren(cent=0):
+	        """Static method for conversion"""
+	        return (cent * CONVERSION_CONST) + 32
+	
+	    @pytest.mark.parametrize("cent,expected", zip(cent, faren))
+	    def test_conversion(self, cent, expected):
+	        """Test conversion with various values"""
+	        result = self.cent_to_faren(cent)
+	        # Use pytest.approx for floating point comparisons
+	        assert result == pytest.approx(expected, rel=1e-3)
+	
+	    def test_no_input(self):
+	        """Test default parameter value"""
+	        assert self.cent_to_faren() == 32
+	
+	    @pytest.mark.skip(reason="Skipping Test")
+	    @pytest.mark.parametrize("temperature", cent)
+	    def test_datatype_confirm_float(self, temperature):
+	        """Test return type is float"""
+	        result = self.cent_to_faren(temperature)
+	        assert type(result) == float
+	
+	    @pytest.mark.skipif(sys.version_info > (3,6),reason="Don't execute this for python version above 3.8")
+	    def test_404(self):
+	        with pytest.raises(Exception):
+	            assert requests.get("https://httpbin.org/status/404"), f"404 Response Code"
+	
+	    @pytest.mark.xfail(reason="Expected to fail")
+	    def test_404_xfail(self):
+	        assert requests.get("https://httpbin.org/status/404"), f"404 Response Code"
+  
+  		@pytest.mark.xfail(reason="Expected to fail")		
+  		def test_no_input_xpass(self):
+	        """Test default parameter value"""
+	        assert self.cent_to_faren() == 32
+	
+	    def run_tests(self):
+	
+	        self.test_no_input()
+  	        self.test_no_input_xpass()
+	        self.test_404_xfail()
+	        for a,b in testset:
+	            self.test_conversion(a,b)
+	
+	if __name__ == '__main__':
+	    # Run pytest programmatically (no need for custom test runner)
+	    test = TestCases()
+	    test.run_tests()
+    ```
+
+- Here you can clearly see specified that test_404_xfail is expected to fail, and is marked with `@pytest.mark.xfail`.
+- Now, when we run the command `pytest -v ./pytest-topics/pytest-assertions/test_module04.py`, you will get the following output:
+
+    ```bash
+    $   pytest -v ./pytest-topics/pytest-assertions/test_module04.py
+	=============================================================== test session starts ================================================================
+	platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+	cachedir: .pytest_cache
+	rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+	configfile: pytest.ini
+	plugins: django-4.5.2
+	collected 14 items                                                                                                                                 
+	
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[8-46.4] PASSED                                                  [  7%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[42-107.6] PASSED                                                [ 14%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[100-212.0] PASSED                                               [ 21%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[23-73.4] PASSED                                                 [ 28%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[35-95.0] PASSED                                                 [ 35%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_no_input PASSED                                                            [ 42%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[8] SKIPPED (Skipping Test)                          [ 50%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[42] SKIPPED (Skipping Test)                         [ 57%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[100] SKIPPED (Skipping Test)                        [ 64%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[23] SKIPPED (Skipping Test)                         [ 71%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[35] SKIPPED (Skipping Test)                         [ 78%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_404 SKIPPED (Don't execute this for python version above 3.8)              [ 85%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_404_xfail XFAIL (Expected to fail)                                         [ 92%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_no_input_xpass XPASS (Expected to fail)                                    [100%]
+	
+	================================================ 6 passed, 6 skipped, 1 xfailed, 1 xpassed in 1.26s ================================================
+    ```
+  
+  And, you can clearly see the test case that is marked to fail has actually failed, but doesn't show as failed rather as xfailed, and another test case which is supposed to fail and, marked to be failed has actually passed, but is shown as xpassed.
+
+- xfail markers can also be used with conditions, and can be used as follows:
+
+  ```python
+  @pytest.mark.xfail(condition, reason="<reason__statement")
+  ```
+  
+  Let's understand this with an example:
+
+    ```python
+	import sys
+	
+	import pytest
+	import requests
+	
+	# Corrected testset (fixed last entry and added missing Celsius value)
+	cent = [8, 42, 100, 23, 35]
+	faren = [46.4, 107.6, 212.0, 73.4, 95.0]
+	CONVERSION_CONST = 9/5  # Constants in uppercase
+	testset = zip(cent,faren)
+	
+	class TestCases:
+	
+	    @staticmethod
+	    def cent_to_faren(cent=0):
+	        """Static method for conversion"""
+	        return (cent * CONVERSION_CONST) + 32
+	
+	    @pytest.mark.parametrize("cent,expected", zip(cent, faren))
+	    def test_conversion(self, cent, expected):
+	        """Test conversion with various values"""
+	        result = self.cent_to_faren(cent)
+	        # Use pytest.approx for floating point comparisons
+	        assert result == pytest.approx(expected, rel=1e-3)
+	
+	    def test_no_input(self):
+	        """Test default parameter value"""
+	        assert self.cent_to_faren() == 32
+	
+	    @pytest.mark.skip(reason="Skipping Test")
+	    @pytest.mark.parametrize("temperature", cent)
+	    def test_datatype_confirm_float(self, temperature):
+	        """Test return type is float"""
+	        result = self.cent_to_faren(temperature)
+	        assert type(result) == float
+	
+	    @pytest.mark.skipif(sys.version_info > (3,6),reason="Don't execute this for python version above 3.8")
+	    def test_404(self):
+	        with pytest.raises(Exception):
+	            assert requests.get("https://httpbin.org/status/404"), f"404 Response Code"
+	
+	    @pytest.mark.xfail(sys.version_info > (3,6),reason="Don't execute this for python version above 3.8")
+	    def test_404_xfail(self):
+	        assert requests.get("https://httpbin.org/status/404"), f"404 Response Code"
+	
+	    @pytest.mark.xfail(reason="Expected to fail")
+	    def test_no_input_xpass(self):
+	        """Test default parameter value"""
+	        assert self.cent_to_faren() == 32
+	
+	    def run_tests(self):
+	
+	        self.test_no_input()
+	        self.test_no_input_xpass()
+	        self.test_404_xfail()
+	        for a,b in testset:
+	            self.test_conversion(a,b)
+	
+	if __name__ == '__main__':
+	    # Run pytest programmatically (no need for custom test runner)
+	    test = TestCases()
+	    test.run_tests()  
+    ```
+  
+- Here' in the above example, we have given a condition for xfail, that if the python version is greater than 3.6, then the test case is expected to fail.
+- If you run the command `pytest -v ./pytest-topics/pytest-assertions/test_module04.py`, you will get the following output:
+
+    ```bash
+    $ pytest -v ./pytest-topics/pytest-assertions/test_module04.py
+	=============================================================== test session starts ================================================================
+	platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+	cachedir: .pytest_cache
+	rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+	configfile: pytest.ini
+	plugins: django-4.5.2
+	collected 14 items                                                                                                                                 
+	
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[8-46.4] PASSED                                                  [  7%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[42-107.6] PASSED                                                [ 14%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[100-212.0] PASSED                                               [ 21%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[23-73.4] PASSED                                                 [ 28%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_conversion[35-95.0] PASSED                                                 [ 35%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_no_input PASSED                                                            [ 42%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[8] SKIPPED (Skipping Test)                          [ 50%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[42] SKIPPED (Skipping Test)                         [ 57%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[100] SKIPPED (Skipping Test)                        [ 64%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[23] SKIPPED (Skipping Test)                         [ 71%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_datatype_confirm_float[35] SKIPPED (Skipping Test)                         [ 78%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_404 SKIPPED (Don't execute this for python version above 3.8)              [ 85%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_404_xfail XFAIL (Don't execute this for python version above 3.8)          [ 92%]
+	pytest-topics/pytest-assertions/test_module04.py::TestCases::test_no_input_xpass XPASS (Expected to fail)                                    [100%]
+	
+	================================================ 6 passed, 6 skipped, 1 xfailed, 1 xpassed in 1.23s ================================================
+    ```
+
+  Here, in this example you can clearly see that it specifies the reason for xfail, and also tested the marker against a condition, and the test case is marked as xfail.
+

@@ -56,10 +56,15 @@ class TestCases:
         assert s.split() == ['My', 'name', 'is', 'Aman', 'and,', 'I', 'am', 'a', 'Python', 'Developer']
         assert s.split(',') == ['My name is Aman and', ' I am a Python Developer']
 
+    @pytest.mark.xfail(reason="Expected to fail")
+    def test_404_xfail(self):
+        assert requests.get("https://httpbin.org/status/404"), f"404 Response Code"
+
     def run_tests(self):
 
         self.test_no_input()
         self.test_404()
+        self.test_404_xfail()
         self.test_str_slice()
         self.test_str_split()
         for a,b in testset:
