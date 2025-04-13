@@ -829,3 +829,13 @@
   ```bash
   pytest -v -k "str" --tb=no 
   ```
+
+## Pytest Cmd Line Options
+
+- `-x` is used when we need to come out of the test case, as soon as the first test-case failure happens.
+- `--maxfail=<number>` is used when we need to come out of tet case, after certain number of failures.
+- `-q` is used for quiet execution when we want to decrease the verbosity of the logs generated.
+- `--collect-only` or `-co` is used when you just want to collect the test cases but not exectue them.
+- `--lf` or `--last-failed` is used when we want to execute only the test cases that failed during the previous run.
+- `-ff` or `--failed-first` runs the test cases that failed during the previous run first, and than others.
+- `--junit-xml=<path>` is used to generate a test report upon execution in xml format.
