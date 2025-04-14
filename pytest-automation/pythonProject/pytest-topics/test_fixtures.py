@@ -1,5 +1,8 @@
 import pytest
 
+days_1 = ['mon', 'tue', 'wed']
+days_2 = ['fri', 'sat', 'sun']
+
 class TestCases:
 
     @pytest.fixture()
@@ -38,6 +41,24 @@ class TestCases:
     @pytest.mark.usefixtures("setup_city")
     def test_fixtureAccessUsingMark(self):
         assert setup_city[0] == 'Singapore'
+
+    @pytest.fixture()
+    def teardown_setup(self):
+        wk = days_1.copy()
+        wk.append('thur')
+        yield wk
+
+        # Teardown started
+        print("\n Week Completed - Teardown Started")
+        wk.pop()
+        print("Teardown Ended")
+
+    def test_completeWeek(self, teardown_setup):
+        teardown_setup.extend(days_2)
+        try:
+            assert teardown_setup == ['mon', 'tue', 'wed', 'thur','fri', 'sat', 'sun']
+        except Exception as e:
+            print(f"Error Occured: {e}.")
 
 
 if __name__ == '__main__':

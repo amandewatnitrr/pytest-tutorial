@@ -32,7 +32,7 @@
 - Once you execute the test cases you see something like this:
 
     ```bash
-	pytest -v test_paramaterize.py                                                   1 ✘  at 20:58:38  
+	 $ pytest -v test_paramaterize.py                                                   1 ✘  at 20:58:38  
 	============================================================================ test session starts ============================================================================
 	platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
 	cachedir: .pytest_cache
@@ -114,7 +114,7 @@
 - Below, is the output of the execution shared:
 
   ```bash
-   pytest -v test_paramaterize.py                                               ✔  took 3s   at 21:16:31  
+  $ pytest -v test_paramaterize.py                                               ✔  took 3s   at 21:16:31  
   ============================================================================ test session starts ============================================================================
   platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
   cachedir: .pytest_cache
@@ -269,7 +269,9 @@
   
   Process finished with exit code 0
   ```
-  
+
+### Implementing Fixtures using Decorators
+
 - We can also call the fixtures using markers as well. We can call a fixture using the decorator.
   
   ```python
@@ -323,7 +325,7 @@
 - If you look atn the output for this, we see the following:
 
   ```bash
-   pytest -v -s test_fixtures.py                                        4 ✘  pythonProject   at 13:34:15  
+  $ pytest -v -s test_fixtures.py                                        4 ✘  pythonProject   at 13:34:15  
   ============================================================================ test session starts ============================================================================
   platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
   cachedir: .pytest_cache
@@ -411,4 +413,116 @@
   
   test_fixtures.py:40: NameError
   ```
+  
+### Setup/Teardown in Fixtures
+
+- We can also use fixtures to perform setup and teardown operations. We can use `yield` keyword to perform the teardown operations.
+- In order to mark a function as fiture use the decorator:
+
+  ```python
+  @pytest.fixture()
+  ```
+- Let's try to understand this through an example:
+
+  ```python
+  import pytest
+  
+  days_1 = ['mon', 'tue', 'wed']
+  days_2 = ['fri', 'sat', 'sun']
+  
+  class TestCases:
+  
+      @pytest.fixture()
+      def setup_city(self):
+          print("Fixture under execution.")
+          city = ['Singapore','Delhi','Chicago','Almaty']
+          return city # It's not mandatory, that a fixture must always return something.
+  
+      def test_city(self, setup_city):
+          try:
+              print(setup_city)
+              assert setup_city[0]  == 'Singapore'
+              assert setup_city[::2] == ['Singapore', 'Chicago']
+  
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+      def reverse_str_array(self, lst):
+          lst.reverse()
+          return lst
+  
+      def test_city_reversed(self,setup_city):
+          try:
+              r =  self.reverse_str_array(setup_city)
+              print(f"\nReversed Values for the setup_city: {r}")
+              assert setup_city[::-1] == self.reverse_str_array(setup_city)
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+  
+      @pytest.mark.usefixtures("setup_city")
+      def test_alwaysTure(self):
+          assert 1==1
+  
+      @pytest.mark.xfail(reason="usefixture decorator cannot use the return value coming from the Fixture.")
+      @pytest.mark.usefixtures("setup_city")
+      def test_fixtureAccessUsingMark(self):
+          assert setup_city[0] == 'Singapore'
+  
+      @pytest.fixture()
+      def teardown_setup(self):
+          wk = days_1.copy()
+          wk.append('thur')
+          yield wk
+  
+          # Teardown started
+          print("\n Week Completed - Teardown Started")
+          wk.pop()
+          print("Teardown Ended")
+  
+      def test_completeWeek(self, teardown_setup):
+          teardown_setup.extend(days_2)
+          try:
+              assert teardown_setup == ['mon', 'tue', 'wed', 'thur','fri', 'sat', 'sun']
+          except Exception as e:
+              print(f"Error Occured: {e}.")
+  
+  
+  if __name__ == '__main__':
+      test = TestCases()
+  ```
+  
+- In the above example, where we have specified `teardown_setup()` as a fixture using the decorator `@pytest.fixture()`.
+- Everything above and including the `yield` statement is the setup, while everything following it is part of teardown.
+- Once you execute this, you will see the following output:
+
+  ```bash
+  $ pytest -v -s test_fixtures.py                                          ✔  pythonProject   at 16:36:14  
+  ============================================================================ test session starts ============================================================================
+  platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  collected 5 items                                                                                                                                                           
+  
+  test_fixtures.py::TestCases::test_city Fixture under execution.
+  ['Singapore', 'Delhi', 'Chicago', 'Almaty']
+  PASSED
+  test_fixtures.py::TestCases::test_city_reversed Fixture under execution.
+  
+  Reversed Values for the setup_city: ['Almaty', 'Chicago', 'Delhi', 'Singapore']
+  PASSED
+  test_fixtures.py::TestCases::test_alwaysTure Fixture under execution.
+  PASSED
+  test_fixtures.py::TestCases::test_fixtureAccessUsingMark Fixture under execution.
+  XFAIL (usefixture decorator cannot use the return value coming from the Fixture.)
+  test_fixtures.py::TestCases::test_completeWeek PASSED
+   Week Completed - Teardown Started
+  Teardown Ended
+  ======================================================================= 4 passed, 1 xfailed in 0.02s ========================================================================
+  ```
+  
+
+
+
   
