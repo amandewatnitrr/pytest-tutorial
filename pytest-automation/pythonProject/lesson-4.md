@@ -1,5 +1,7 @@
 # Pytest: Paramaterized Tests
 
+## `@pytest.mark.parametrize`
+
 - Paramaterized Test are helpful when we want to do data driven tests, and this can help us in increasing the test coverage.
 - Let's say a scenartio when you want to try out our login page with various combinations of username and password. So, we could not be writting the same test again and again for each credential. Rather, we can have them as a key-value pair in a dictionary, and call the same function repeateadly.
 
@@ -147,4 +149,124 @@
   ======================================================================== 1 failed, 7 passed in 0.05s ========================================================================
   ```
   
+## Fixtures in Pytest
 
+- This is a mechanism pytest provides us to get ready for the actual tests and, cleanup post the tests are performed. 
+- `Fixtures` are functions that are run by pytest before(and sometimes after) the actual test functions. Examples: Setting up a Database Connection, Initialize Web Driver.
+- We can put fixtures in individual test files or modules, or we can have it in a directory as well in a `conftest.py` file for making fixtures available in multiple test files.
+- We can also return data from fixture functions.
+- Fixtures are mainly used to Initialize Connections, Open files etc.
+- Let's start learning about this with an example:
+
+  ```python
+  import pytest
+  
+  class TestCases:
+  
+      @pytest.fixture()
+      def setup_city(self):
+          print("Fixture under execution.")
+          city = ['Singapore','Delhi','Chicago','Almaty']
+          return city # It's not mandatory, that a fixture must always return something.
+  
+      def test_city(self, setup_city):
+          try:
+              print(setup_city)
+              assert setup_city[0]  == 'Singapore'
+              assert setup_city[::2] == ['Singapore', 'Chicago']
+  
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+  
+  if __name__ == '__main__':
+      test = TestCases()
+      test.test_city()
+  ```
+
+- If you see the debug logs carefully you can see that the fixtures has initialised everything for us already, and the values are directly being used by the testcases.
+
+  ```bash
+  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python -X pycache_prefix=/Users/akd/Library/Caches/JetBrains/PyCharmCE2024.2/cpython-cache /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pydev/pydevd.py --multiprocess --qt-support=auto --client 127.0.0.1 --port 49537 --file /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pycharm/_jb_pytest_runner.py --path /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_fixtures.py 
+  Testing started at 12:05 pm ...
+  Connected to pydev debugger (build 242.23726.102)
+  Launching pytest with arguments /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_fixtures.py --no-header --no-summary -q in /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics
+  
+  ============================= test session starts ==============================
+  collecting ... collected 1 item
+  
+  test_fixtures.py::TestCases::test_city Fixture under execution.
+  PASSED                            [100%]['Singapore', 'Delhi', 'Chicago', 'Almaty']
+  
+  
+  ============================== 1 passed in 0.02s ===============================
+  
+  Process finished with exit code 0
+  ```
+
+- Also, note that this time the fixture is called by our test function, and then used the return value from the function.
+- Let's try something different, let's say we have used fixtures, and we want to use the value of these fizxtures while they are being manipulated before assertion happens. Let's try to understand this with example below:
+
+  ```python
+  import pytest
+  
+  class TestCases:
+  
+      @pytest.fixture()
+      def setup_city(self):
+          print("Fixture under execution.")
+          city = ['Singapore','Delhi','Chicago','Almaty']
+          return city # It's not mandatory, that a fixture must always return something.
+  
+      def test_city(self, setup_city):
+          try:
+              print(setup_city)
+              assert setup_city[0]  == 'Singapore'
+              assert setup_city[::2] == ['Singapore', 'Chicago']
+  
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+      def reverse_str_array(self, lst):
+          lst.reverse()
+          return lst
+  
+      def test_city_reversed(self,setup_city):
+          try:
+              r =  self.reverse_str_array(setup_city)
+              print(f"\nReversed Values for the setup_city: {r}")
+              assert setup_city[::-1] == self.reverse_str_array(setup_city)
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+  
+  
+  if __name__ == '__main__':
+      test = TestCases()
+      test.test_city()
+  ```
+  
+- Now, when we debug this, this is what we see:
+
+  ```bash
+  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python -X pycache_prefix=/Users/akd/Library/Caches/JetBrains/PyCharmCE2024.2/cpython-cache /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pydev/pydevd.py --multiprocess --qt-support=auto --client 127.0.0.1 --port 49662 --file /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pycharm/_jb_pytest_runner.py --path /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_fixtures.py 
+  Testing started at 1:13 pm ...
+  Connected to pydev debugger (build 242.23726.102)
+  Launching pytest with arguments /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_fixtures.py --no-header --no-summary -q in /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics
+  
+  ============================= test session starts ==============================
+  collecting ... collected 2 items
+  
+  test_fixtures.py::TestCases::test_city Fixture under execution.
+  PASSED                            [ 50%]['Singapore', 'Delhi', 'Chicago', 'Almaty']
+  
+  test_fixtures.py::TestCases::test_city_reversed Fixture under execution.
+  PASSED                   [100%]
+  Reversed Values for the setup_city: ['Almaty', 'Chicago', 'Delhi', 'Singapore']
+  
+  
+  ============================== 2 passed in 0.02s ===============================
+  
+  Process finished with exit code 0
+  ```
+  
