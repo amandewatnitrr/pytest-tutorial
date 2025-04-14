@@ -1128,3 +1128,119 @@
   
 
 - And, we can also manipulate the data and yield it to return the value for further usage depending upon the needs.
+
+### Factories as Fixtures
+
+- If we want to put some logic into the fixture based on the calling test-function. This is helpful in such scenarios. This is called `Factories as Fixtures`.
+- This can help in situations where the result of a fixture is needed multiple times in a single test.
+- Instead of returning data directly, the fixture instead returns a function which generates the data. This function can than be called multiple times in the test.
+- Let's try some examples:
+
+  `test_introspect.py`
+  
+  ```python
+  import pytest
+  
+  digits = [1,2,3,4,5,6,7,8,9,0]
+  
+  class Testcases:
+  
+      def test_addition(self,function_detail):
+          assert 1 + 1 == 2
+  
+      def test_factory(self,return_tuple_or_list):
+          assert type(return_tuple_or_list('tuple')) == tuple
+          assert type(return_tuple_or_list('list')) == list
+  
+  
+  if __name__ == '__main__':
+      test = Testcases()
+  ```
+  
+  `conftest.py`
+  
+  ```python
+  import pytest
+  import os
+  
+  def pytest_configure():
+      pytest.days_1 = ['mon', 'tue', 'wed']
+      pytest.days_2 = ['fri', 'sat', 'sun']
+  
+  
+  @pytest.fixture()
+  def setup_city():
+      print("Fixture under execution.")
+      city = ['Singapore','Delhi','Chicago','Almaty']
+      return city
+  
+  @pytest.fixture()
+  def file_write():
+      pytest.filename = "file1.txt"
+      f = open(pytest.filename, 'w')
+      print("File Written with Data.")
+      f.write("Pytest is good.")
+      f.close()
+      f = open(pytest.filename, 'r+')
+      yield f
+      print("\n File Available for reading")
+      f.close()
+      os.remove(pytest.filename)
+      print("\n File is deleted after, test execution.")
+  
+  
+  @pytest.fixture()
+  def function_detail(request):
+      print(f"\nStarting test: {request.node.name}")
+      print(f"\nIn Module: {request.module.__name__}")
+      print(f"\n Request Scope: {request.scope}")
+      print(f"\n Function Name: {request.function.__name__}")
+      digits =  getattr(request.module, "digits")
+      print(f"\n Digits: {digits}")
+      yield
+      print(f"\nFinished test: {request.node.name}")
+  
+  @pytest.fixture()
+  def return_tuple_or_list():
+      def get_dt(name):
+          if name == 'list':
+              return [1,2,3]
+          elif name == 'tuple':
+              return (1,2,3)
+          else:
+              raise ValueError("Invalid type requested")
+      return get_dt
+  ```
+  
+- Once you execute this, you will see the following output:
+
+  ```bash
+  $ pytest -v -s test_introspect.py                                              1 ✘  at 23:32:33  
+  ========================================================================== test session starts ==========================================================================
+  platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: django-4.5.2
+  collected 2 items                                                                                                                                                       
+  
+  test_introspect.py::Testcases::test_addition 
+  Starting test: test_addition
+  
+  In Module: test_introspect
+  
+   Request Scope: function
+  
+   Function Name: test_addition
+  
+   Digits: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+  PASSED
+  Finished test: test_addition
+  
+  test_introspect.py::Testcases::test_factory PASSED
+  
+  =========================================================================== 2 passed in 0.01s ===========================================================================
+  ```
+  
+- And, here we see that the `test_factory` test has passed. basically, we created a fixture that returns a complete function in itself, that will return a value, based on the input provided to the fixture.
+

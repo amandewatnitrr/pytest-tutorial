@@ -7,5 +7,10 @@ class Testcases:
     def test_addition(self,function_detail):
         assert 1 + 1 == 2
 
+    def test_factory(self,return_tuple_or_list):
+        assert type(return_tuple_or_list('tuple')) == tuple
+        assert type(return_tuple_or_list('list')) == list
+
+
 if __name__ == '__main__':
     test = Testcases()

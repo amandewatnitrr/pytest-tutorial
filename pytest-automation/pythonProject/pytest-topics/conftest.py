@@ -37,3 +37,14 @@ def function_detail(request):
     print(f"\n Digits: {digits}")
     yield
     print(f"\nFinished test: {request.node.name}")
+
+@pytest.fixture()
+def return_tuple_or_list():
+    def get_dt(name):
+        if name == 'list':
+            return [1,2,3]
+        elif name == 'tuple':
+            return (1,2,3)
+        else:
+            raise ValueError("Invalid type requested")
+    return get_dt
