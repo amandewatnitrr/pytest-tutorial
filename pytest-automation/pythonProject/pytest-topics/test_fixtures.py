@@ -60,6 +60,19 @@ class TestCases:
         except Exception as e:
             print(f"Error Occured: {e}.")
 
+    @pytest.fixture()
+    def days_2_manipulation(self):
+        wk = days_2.copy()
+        wk.insert(0,'thur')
+        yield wk
+        print("days_2 manipulation over.")
+
+    def test_equalLength(self,teardown_setup,days_2_manipulation):
+        try:
+            assert len(days_1 + days_2_manipulation) == len(teardown_setup + days_2)
+        except Exception as e:
+            print(f"Unexpected Error Occurred: {e}")
+
 
 if __name__ == '__main__':
     test = TestCases()
