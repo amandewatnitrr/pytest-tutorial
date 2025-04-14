@@ -1,4 +1,5 @@
 import pytest
+import os
 
 days_1 = ['mon', 'tue', 'wed']
 days_2 = ['fri', 'sat', 'sun']
@@ -83,6 +84,9 @@ class TestCases:
         f = open(filename, 'r+')
         yield f
         print("\n File Available for reading")
+        f.close()
+        os.remove(filename)
+        print("\n File is deleted after, test execution.")
 
     def test_fileData(self, file_write):
         try:

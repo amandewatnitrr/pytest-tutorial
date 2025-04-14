@@ -646,6 +646,7 @@
 
   ```python
   import pytest
+  import os
   
   days_1 = ['mon', 'tue', 'wed']
   days_2 = ['fri', 'sat', 'sun']
@@ -730,6 +731,9 @@
           f = open(filename, 'r+')
           yield f
           print("\n File Available for reading")
+          f.close()
+          os.remove(filename)
+          print("\n File is deleted after, test execution.")
   
       def test_fileData(self, file_write):
           try:
@@ -745,7 +749,7 @@
 - Below is the output:
 
   ```bash
-  $  pytest -v -s test_fixtures.py                         ✔  at 18:03:11  
+  $  pytest -v -s test_fixtures.py                                                             ✔  at 18:13:44  
   ============================================================================ test session starts =============================================================================
   platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
   cachedir: .pytest_cache
@@ -778,9 +782,8 @@
   PASSED
    File Available for reading
   
-  
+   File is deleted after, test execution.
   ======================================================================== 6 passed, 1 xfailed in 0.02s ========================================================================
   ```
-  
 
-  
+
