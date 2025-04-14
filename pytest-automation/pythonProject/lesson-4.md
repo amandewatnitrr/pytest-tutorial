@@ -956,3 +956,50 @@
 > [!NOTE]
 > Fixtures can be overriden from test module level.
 > The Fixtures in the subdirectory will override the fixtures coming from the parent direcotry if they have the same name.
+
+> [!NOTE]
+> If you want to track the execution of the fixtures use the `--setup-show` option when executing the pytest command.
+
+- Let's trace the fixture execution through the example we just used.
+
+  ```bash
+  $ pytest -v -s test_fixtures.py --setup-show                                              ✔  at 22:05:05  
+  ========================================================================== test session starts ==========================================================================
+  platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: django-4.5.2
+  collected 7 items                                                                                                                                                       
+  
+  test_fixtures.py::TestCases::test_city 
+  SETUP    S _fail_for_invalid_template_variable
+  SETUP    S django_test_environment
+  SETUP    S django_db_blocker
+        SETUP    C _django_setup_unittest (fixtures used: django_db_blocker)
+          SETUP    F _dj_autoclear_mailbox
+          SETUP    F _django_clear_site_cache
+          SETUP    F _django_db_marker
+          SETUP    F _django_set_urlconf
+          SETUP    F _live_server_helper
+          SETUP    F _template_string_if_invalid_markerFixture under execution.
+  
+          SETUP    F setup_city
+          pytest-topics/test_fixtures.py::TestCases::test_city (fixtures used: _dj_autoclear_mailbox, _django_clear_site_cache, _django_db_marker, _django_set_urlconf, _django_setup_unittest, _fail_for_invalid_template_variable, _live_server_helper, _template_string_if_invalid_marker, django_db_blocker, django_test_environment, request, setup_city)['Singapore', 'Delhi', 'Chicago', 'Almaty']
+  PASSED
+          TEARDOWN F setup_city
+          TEARDOWN F _template_string_if_invalid_marker
+          TEARDOWN F _live_server_helper
+          TEARDOWN F _django_set_urlconf
+          TEARDOWN F _django_db_marker
+          TEARDOWN F _django_clear_site_cache
+          TEARDOWN F _dj_autoclear_mailbox
+  ```
+  
+- This is a small portion of the output that we got, we clearly see here `SETUP F setup_city`, that the setup for fixture has been done.
+- On the next line it clearly specifies the following, here at the end you can find `setup_city` in the fixture used list, with it's respective values. Not all the setup mentioned here are not needed.
+
+  ```bash
+  pytest-topics/test_fixtures.py::TestCases::test_city (fixtures used: _dj_autoclear_mailbox, _django_clear_site_cache, _django_db_marker, _django_set_urlconf, _django_setup_unittest, _fail_for_invalid_template_variable, _live_server_helper, _template_string_if_invalid_marker, django_db_blocker, django_test_environment, request, setup_city)['Singapore', 'Delhi', 'Chicago', 'Almaty']
+  ```
+  
