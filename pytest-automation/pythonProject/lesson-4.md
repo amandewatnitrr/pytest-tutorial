@@ -1003,3 +1003,128 @@
   pytest-topics/test_fixtures.py::TestCases::test_city (fixtures used: _dj_autoclear_mailbox, _django_clear_site_cache, _django_db_marker, _django_set_urlconf, _django_setup_unittest, _fail_for_invalid_template_variable, _live_server_helper, _template_string_if_invalid_marker, django_db_blocker, django_test_environment, request, setup_city)['Singapore', 'Delhi', 'Chicago', 'Almaty']
   ```
   
+### Introspecting the Calling Test Function
+
+> [!IMPORTANT]
+> Pytest `request` fixture allows your fixtures to inspect the test functions using them. This is useful for dynamic behaviour based on test properites.
+
+- Let's learn this through an example:
+
+  `test_introspect.py`
+
+  ```python
+  import pytest
+  
+  class Testcases:
+  
+      def test_addition(self,function_detail):
+          assert 1 + 1 == 2
+  
+  if __name__ == '__main__':
+      test = Testcases()
+  ```
+  
+  `conftest.py`
+
+  ```python
+  @pytest.fixture()
+  def function_detail(request):
+      print(f"\nStarting test: {request.node.name}")
+      print(f"\nIn Module: {request.module.__name__}")
+      print(f"\n Request Scope: {request.scope}")
+      yield
+      print(f"\nFinished test: {request.node.name}")
+  ```
+  
+- Once, you execute this you see the following output:
+
+  ```bash
+  $  pytest -v -s test_introspect.py                                          ✔  at 22:50:05  
+  ========================================================================== test session starts ==========================================================================
+  platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: django-4.5.2
+  collected 1 item                                                                                                                                                        
+  
+  test_introspect.py::Testcases::test_addition 
+  Starting test: test_addition
+  
+  In Module: test_introspect
+  
+   Request Scope: function
+  PASSED
+  Finished test: test_addition
+  =========================================================================== 1 passed in 0.01s ===========================================================================
+  ```
+  
+- Here, it clearly shows:
+  - `test function name` for `request.node.name`.
+  - `test file name` for `request.module.__name__`
+  - `scope of the test` for `request.scope`
+
+- `request.function.__name__` is same as `request.node.name`.
+- based on this the developer can decide to have a certain logic or c3ertain set of inputs to be given based the function from which the request is coming.
+- We can also fetch variable from the module using the following way shown below:
+
+  `conftest.py`
+
+  ```python
+  @pytest.fixture()
+  def function_detail(request):
+      print(f"\nStarting test: {request.node.name}")
+      print(f"\nIn Module: {request.module.__name__}")
+      print(f"\n Request Scope: {request.scope}")
+      print(f"\n Function Name: {request.function.__name__}")
+      digits =  getattr(request.module, "digits")
+      print(f"\n Digits: {digits}")
+      yield
+      print(f"\nFinished test: {request.node.name}")
+  ```
+  
+  `test_introspect.py`
+
+  ```python
+  import pytest
+  
+  digits = [1,2,3,4,5,6,7,8,9,0]
+  
+  class Testcases:
+  
+      def test_addition(self,function_detail):
+          assert 1 + 1 == 2
+  
+  if __name__ == '__main__':
+      test = Testcases()
+  ```
+  
+- Once executed, you will see the following output:
+
+  ```bash
+  $ pytest -v -s test_introspect.py                                          ✔  at 22:54:57  
+  ========================================================================== test session starts ==========================================================================
+  platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: django-4.5.2
+  collected 1 item                                                                                                                                                        
+  
+  test_introspect.py::Testcases::test_addition 
+  Starting test: test_addition
+  
+  In Module: test_introspect
+  
+   Request Scope: function
+  
+   Function Name: test_addition
+  
+   Digits: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+  PASSED
+  Finished test: test_addition  
+  =========================================================================== 1 passed in 0.01s ===========================================================================
+  ```
+  
+
+- And, we can also manipulate the data and yield it to return the value for further usage depending upon the needs.

@@ -25,3 +25,15 @@ def file_write():
     f.close()
     os.remove(pytest.filename)
     print("\n File is deleted after, test execution.")
+
+
+@pytest.fixture()
+def function_detail(request):
+    print(f"\nStarting test: {request.node.name}")
+    print(f"\nIn Module: {request.module.__name__}")
+    print(f"\n Request Scope: {request.scope}")
+    print(f"\n Function Name: {request.function.__name__}")
+    digits =  getattr(request.module, "digits")
+    print(f"\n Digits: {digits}")
+    yield
+    print(f"\nFinished test: {request.node.name}")
