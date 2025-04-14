@@ -30,7 +30,15 @@ class TestCases:
             print(f"Unknown Error Occured {e}")
 
 
+    @pytest.mark.usefixtures("setup_city")
+    def test_alwaysTure(self):
+        assert 1==1
+
+    @pytest.mark.xfail(reason="usefixture decorator cannot use the return value coming from the Fixture.")
+    @pytest.mark.usefixtures("setup_city")
+    def test_fixtureAccessUsingMark(self):
+        assert setup_city[0] == 'Singapore'
+
 
 if __name__ == '__main__':
     test = TestCases()
-    test.test_city()

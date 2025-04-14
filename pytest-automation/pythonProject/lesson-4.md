@@ -270,3 +270,145 @@
   Process finished with exit code 0
   ```
   
+- We can also call the fixtures using markers as well. We can call a fixture using the decorator.
+  
+  ```python
+  @pytest.mark.usefixtures("fixture_name")
+  ```
+
+- Let's see this through an example again over here:
+
+  ```python
+  import pytest
+  
+  class TestCases:
+  
+      @pytest.fixture()
+      def setup_city(self):
+          print("Fixture under execution.")
+          city = ['Singapore','Delhi','Chicago','Almaty']
+          return city # It's not mandatory, that a fixture must always return something.
+  
+      def test_city(self, setup_city):
+          try:
+              print(setup_city)
+              assert setup_city[0]  == 'Singapore'
+              assert setup_city[::2] == ['Singapore', 'Chicago']
+  
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+      def reverse_str_array(self, lst):
+          lst.reverse()
+          return lst
+  
+      def test_city_reversed(self,setup_city):
+          try:
+              r =  self.reverse_str_array(setup_city)
+              print(f"\nReversed Values for the setup_city: {r}")
+              assert setup_city[::-1] == self.reverse_str_array(setup_city)
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+      @pytest.mark.usefixtures("setup_city")
+      def test_alwaysTure(self):
+          assert 1==1
+  
+  
+  
+  if __name__ == '__main__':
+      test = TestCases()
+  ```
+
+- If you look atn the output for this, we see the following:
+
+  ```bash
+   pytest -v -s test_fixtures.py                                        4 ✘  pythonProject   at 13:34:15  
+  ============================================================================ test session starts ============================================================================
+  platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  collected 3 items                                                                                                                                                           
+  
+  test_fixtures.py::TestCases::test_city Fixture under execution.
+  ['Singapore', 'Delhi', 'Chicago', 'Almaty']
+  PASSED
+  test_fixtures.py::TestCases::test_city_reversed Fixture under execution.
+  
+  Reversed Values for the setup_city: ['Almaty', 'Chicago', 'Delhi', 'Singapore']
+  PASSED
+  test_fixtures.py::TestCases::test_alwaysTure Fixture under execution.
+  PASSED
+  
+  ============================================================================= 3 passed in 0.00s =============================================================================
+  ```
+
+- The fixture was also called for the test `test_alwaysTrue` by the marker and, not by the function.
+- But, the problem in this scenario is we cannot use the return value from the fixture when called using marker or decorator.
+- You can see this clearly in the example below:
+
+  ```python
+  import pytest
+  
+  class TestCases:
+  
+      @pytest.fixture()
+      def setup_city(self):
+          print("Fixture under execution.")
+          city = ['Singapore','Delhi','Chicago','Almaty']
+          return city # It's not mandatory, that a fixture must always return something.
+  
+      def test_city(self, setup_city):
+          try:
+              print(setup_city)
+              assert setup_city[0]  == 'Singapore'
+              assert setup_city[::2] == ['Singapore', 'Chicago']
+  
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+      def reverse_str_array(self, lst):
+          lst.reverse()
+          return lst
+  
+      def test_city_reversed(self,setup_city):
+          try:
+              r =  self.reverse_str_array(setup_city)
+              print(f"\nReversed Values for the setup_city: {r}")
+              assert setup_city[::-1] == self.reverse_str_array(setup_city)
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+  
+      @pytest.mark.usefixtures("setup_city")
+      def test_alwaysTure(self):
+          assert 1==1
+  
+      @pytest.mark.xfail(reason="usefixture decorator cannot use the return value coming from the Fixture.")
+      @pytest.mark.usefixtures("setup_city")
+      def test_fixtureAccessUsingMark(self):
+          assert setup_city[0] == 'Singapore'
+  
+  
+  if __name__ == '__main__':
+      test = TestCases()
+  ```
+
+- Here, in the output below you can clearly see that, we are inside the fixture, as the statement prints `Fixture under execution`. But, when tried to access it's value, it says undefined.
+  
+  ```bash
+  Fixture under execution.
+  XFAILthe
+  Fixture.)                                                                [100%]
+  self = <test_fixtures.TestCases object at 0x104863a50>
+  
+      @pytest.mark.xfail(reason="usefixture decorator cannot use the return value coming from the Fixture.")
+      @pytest.mark.usefixtures("setup_city")
+      def test_fixtureAccessUsingMark(self):
+  >       assert setup_city[0] == 'Singapore'
+  E       NameError: name 'setup_city' is not defined
+  
+  test_fixtures.py:40: NameError
+  ```
+  
