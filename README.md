@@ -16,4 +16,7 @@
 
 - This is going to be a great learning experience overall, so get ready, to start your hands on with testing using Pytest in Python.<br/><br/>
 - It would be reall great if the learners have a decent experience, working around with python, would be really helpful.
+
+- You can find all the lesson files in `./pytest-automation/pythonProject/`.
+- Have a great learning experience.
  
