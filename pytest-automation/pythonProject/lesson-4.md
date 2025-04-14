@@ -787,3 +787,171 @@
   ```
 
 
+### Pytest: Sharing Fixtures
+
+- If we want too make fixtures available in one file, to fixtures in another file, we will have to use plugin called `conftest.py` file.
+> [!IMPORTANT]
+> `conftest.py` file is a python module, the fixtures written in that file are available throughout the directory, as well anywhere within the sub-directory within the directory it exsists. 
+> We can have multiple `conftest.py` file in multiple subdirectories, but only 1 in each of them.
+
+> [!TIP]
+> `conftest.py` should not be imported by test files as it is a python module. 
+> The `conftest.py` is automatically identified by the pytest during the test execution.
+
+- Let's look at an example of how we can use the `conftest.py` file:
+
+  `conftest.py` file
+
+  ```python
+  import pytest
+  import os
+  
+  def pytest_configure():
+      pytest.days_1 = ['mon', 'tue', 'wed']
+      pytest.days_2 = ['fri', 'sat', 'sun']
+  
+  
+  @pytest.fixture()
+  def setup_city():
+      print("Fixture under execution.")
+      city = ['Singapore','Delhi','Chicago','Almaty']
+      return city
+  
+  @pytest.fixture()
+  def file_write():
+      pytest.filename = "file1.txt"
+      f = open(pytest.filename, 'w')
+      print("File Written with Data.")
+      f.write("Pytest is good.")
+      f.close()
+      f = open(pytest.filename, 'r+')
+      yield f
+      print("\n File Available for reading")
+      f.close()
+      os.remove(pytest.filename)
+      print("\n File is deleted after, test execution.")
+  ```
+
+
+  ```python
+  import pytest
+  import os
+  
+  class TestCases:
+  
+      def test_city(self, setup_city):
+          try:
+              print(setup_city)
+              assert setup_city[0]  == 'Singapore'
+              assert setup_city[::2] == ['Singapore', 'Chicago']
+  
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+      def reverse_str_array(self, lst):
+          lst.reverse()
+          return lst
+  
+      def test_city_reversed(self,setup_city):
+          try:
+              r =  self.reverse_str_array(setup_city)
+              print(f"\nReversed Values for the setup_city: {r}")
+              assert setup_city[::-1] == self.reverse_str_array(setup_city)
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+  
+      @pytest.mark.usefixtures("setup_city")
+      def test_alwaysTure(self):
+          assert 1==1
+  
+      @pytest.mark.xfail(reason="usefixture decorator cannot use the return value coming from the Fixture.")
+      @pytest.mark.usefixtures("setup_city")
+      def test_fixtureAccessUsingMark(self):
+          assert setup_city[0] == 'Singapore'
+  
+      @pytest.fixture()
+      def teardown_setup(self):
+          wk = pytest.days_1.copy()
+          wk.append('thur')
+          yield wk
+  
+          # Teardown started
+          print("\n Week Completed - Teardown Started")
+          wk.pop()
+          print("Teardown Ended")
+  
+      def test_completeWeek(self, teardown_setup):
+          teardown_setup.extend(pytest.days_2)
+          try:
+              assert teardown_setup == ['mon', 'tue', 'wed', 'thur','fri', 'sat', 'sun']
+          except Exception as e:
+              print(f"Error Occured: {e}.")
+  
+      @pytest.fixture()
+      def days_2_manipulation(self):
+          wk = pytest.days_2.copy()
+          wk.insert(0,'thur')
+          yield wk
+          print("days_2 manipulation over.")
+  
+      def test_equalLength(self,teardown_setup,days_2_manipulation):
+          try:
+              assert len(pytest.days_1 + days_2_manipulation) == len(teardown_setup + pytest.days_2)
+          except Exception as e:
+              print(f"Unexpected Error Occurred: {e}")
+  
+      def test_fileData(self, file_write):
+          try:
+              assert (file_write.readline()) == "Pytest is good."
+          except Exception as e:
+              print(f"Unknown error occured {e}.")
+  
+  
+  if __name__ == '__main__':
+      test = TestCases()
+  ```
+
+- As, we can see we have shifted various fixtures to the `conftest.py` file, and if you run this with the changes done, it still executes successfully as expected the same way. Here's the output to the same:
+
+  ```bash
+  $ pytest -v -s test_fixtures.py                                                  ✔  at 21:29:47  
+  ========================================================================== test session starts ==========================================================================
+  platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: django-4.5.2
+  collected 7 items                                                                                                                                                       
+  
+  test_fixtures.py::TestCases::test_city Fixture under execution.
+  ['Singapore', 'Delhi', 'Chicago', 'Almaty']
+  PASSED
+  test_fixtures.py::TestCases::test_city_reversed Fixture under execution.
+  
+  Reversed Values for the setup_city: ['Almaty', 'Chicago', 'Delhi', 'Singapore']
+  PASSED
+  test_fixtures.py::TestCases::test_alwaysTure Fixture under execution.
+  PASSED
+  test_fixtures.py::TestCases::test_fixtureAccessUsingMark Fixture under execution.
+  XFAIL (usefixture decorator cannot use the return value coming from the Fixture.)
+  test_fixtures.py::TestCases::test_completeWeek PASSED
+   Week Completed - Teardown Started
+  Teardown Ended
+  
+  test_fixtures.py::TestCases::test_equalLength PASSEDdays_2 manipulation over.
+  
+   Week Completed - Teardown Started
+  Teardown Ended
+  
+  test_fixtures.py::TestCases::test_fileData File Written with Data.
+  PASSED
+   File Available for reading
+  
+   File is deleted after, test execution.
+  ===================================================================== 6 passed, 1 xfailed in 0.02s ======================================================================
+  ```
+
+> [!NOTE]
+> Fixtures can be overriden from test module level.
+> The Fixtures in the subdirectory will override the fixtures coming from the parent direcotry if they have the same name.

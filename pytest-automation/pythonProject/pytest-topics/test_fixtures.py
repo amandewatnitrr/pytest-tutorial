@@ -1,17 +1,8 @@
 import pytest
 import os
 
-days_1 = ['mon', 'tue', 'wed']
-days_2 = ['fri', 'sat', 'sun']
-filename = "file1.txt"
 
 class TestCases:
-
-    @pytest.fixture()
-    def setup_city(self):
-        print("Fixture under execution.")
-        city = ['Singapore','Delhi','Chicago','Almaty']
-        return city # It's not mandatory, that a fixture must always return something.
 
     def test_city(self, setup_city):
         try:
@@ -46,7 +37,7 @@ class TestCases:
 
     @pytest.fixture()
     def teardown_setup(self):
-        wk = days_1.copy()
+        wk = pytest.days_1.copy()
         wk.append('thur')
         yield wk
 
@@ -56,7 +47,7 @@ class TestCases:
         print("Teardown Ended")
 
     def test_completeWeek(self, teardown_setup):
-        teardown_setup.extend(days_2)
+        teardown_setup.extend(pytest.days_2)
         try:
             assert teardown_setup == ['mon', 'tue', 'wed', 'thur','fri', 'sat', 'sun']
         except Exception as e:
@@ -64,29 +55,16 @@ class TestCases:
 
     @pytest.fixture()
     def days_2_manipulation(self):
-        wk = days_2.copy()
+        wk = pytest.days_2.copy()
         wk.insert(0,'thur')
         yield wk
         print("days_2 manipulation over.")
 
     def test_equalLength(self,teardown_setup,days_2_manipulation):
         try:
-            assert len(days_1 + days_2_manipulation) == len(teardown_setup + days_2)
+            assert len(pytest.days_1 + days_2_manipulation) == len(teardown_setup + pytest.days_2)
         except Exception as e:
             print(f"Unexpected Error Occurred: {e}")
-
-    @pytest.fixture()
-    def file_write(self):
-        f = open(filename, 'w')
-        print("File Written with Data.")
-        f.write("Pytest is good.")
-        f.close()
-        f = open(filename, 'r+')
-        yield f
-        print("\n File Available for reading")
-        f.close()
-        os.remove(filename)
-        print("\n File is deleted after, test execution.")
 
     def test_fileData(self, file_write):
         try:
