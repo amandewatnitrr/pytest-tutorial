@@ -639,5 +639,148 @@
   Teardown Ended
   ======================================================================= 5 passed, 1 xfailed in 0.01s ========================================================================
   ```
+  
+### Teardown Example for File Operations
+
+- Here's a great example for file operations:
+
+  ```python
+  import pytest
+  
+  days_1 = ['mon', 'tue', 'wed']
+  days_2 = ['fri', 'sat', 'sun']
+  filename = "file1.txt"
+  
+  class TestCases:
+  
+      @pytest.fixture()
+      def setup_city(self):
+          print("Fixture under execution.")
+          city = ['Singapore','Delhi','Chicago','Almaty']
+          return city # It's not mandatory, that a fixture must always return something.
+  
+      def test_city(self, setup_city):
+          try:
+              print(setup_city)
+              assert setup_city[0]  == 'Singapore'
+              assert setup_city[::2] == ['Singapore', 'Chicago']
+  
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+      def reverse_str_array(self, lst):
+          lst.reverse()
+          return lst
+  
+      def test_city_reversed(self,setup_city):
+          try:
+              r =  self.reverse_str_array(setup_city)
+              print(f"\nReversed Values for the setup_city: {r}")
+              assert setup_city[::-1] == self.reverse_str_array(setup_city)
+          except Exception as e:
+              print(f"Unknown Error Occured {e}")
+  
+  
+      @pytest.mark.usefixtures("setup_city")
+      def test_alwaysTure(self):
+          assert 1==1
+  
+      @pytest.mark.xfail(reason="usefixture decorator cannot use the return value coming from the Fixture.")
+      @pytest.mark.usefixtures("setup_city")
+      def test_fixtureAccessUsingMark(self):
+          assert setup_city[0] == 'Singapore'
+  
+      @pytest.fixture()
+      def teardown_setup(self):
+          wk = days_1.copy()
+          wk.append('thur')
+          yield wk
+  
+          # Teardown started
+          print("\n Week Completed - Teardown Started")
+          wk.pop()
+          print("Teardown Ended")
+  
+      def test_completeWeek(self, teardown_setup):
+          teardown_setup.extend(days_2)
+          try:
+              assert teardown_setup == ['mon', 'tue', 'wed', 'thur','fri', 'sat', 'sun']
+          except Exception as e:
+              print(f"Error Occured: {e}.")
+  
+      @pytest.fixture()
+      def days_2_manipulation(self):
+          wk = days_2.copy()
+          wk.insert(0,'thur')
+          yield wk
+          print("days_2 manipulation over.")
+  
+      def test_equalLength(self,teardown_setup,days_2_manipulation):
+          try:
+              assert len(days_1 + days_2_manipulation) == len(teardown_setup + days_2)
+          except Exception as e:
+              print(f"Unexpected Error Occurred: {e}")
+  
+      @pytest.fixture()
+      def file_write(self):
+          f = open(filename, 'w')
+          print("File Written with Data.")
+          f.write("Pytest is good.")
+          f.close()
+          f = open(filename, 'r+')
+          yield f
+          print("\n File Available for reading")
+  
+      def test_fileData(self, file_write):
+          try:
+              assert (file_write.readline()) == "Pytest is good."
+          except Exception as e:
+              print(f"Unknown error occured {e}.")
+  
+  
+  if __name__ == '__main__':
+      test = TestCases()
+  ```
+
+- Below is the output:
+
+  ```bash
+  $  pytest -v -s test_fixtures.py                         ✔  at 18:03:11  
+  ============================================================================ test session starts =============================================================================
+  platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: django-4.5.2
+  collected 7 items                                                                                                                                                            
+  
+  test_fixtures.py::TestCases::test_city Fixture under execution.
+  ['Singapore', 'Delhi', 'Chicago', 'Almaty']
+  PASSED
+  test_fixtures.py::TestCases::test_city_reversed Fixture under execution.
+  
+  Reversed Values for the setup_city: ['Almaty', 'Chicago', 'Delhi', 'Singapore']
+  PASSED
+  test_fixtures.py::TestCases::test_alwaysTure Fixture under execution.
+  PASSED
+  test_fixtures.py::TestCases::test_fixtureAccessUsingMark Fixture under execution.
+  XFAIL (usefixture decorator cannot use the return value coming from the Fixture.)
+  test_fixtures.py::TestCases::test_completeWeek PASSED
+   Week Completed - Teardown Started
+  Teardown Ended
+  
+  test_fixtures.py::TestCases::test_equalLength PASSEDdays_2 manipulation over.
+  
+   Week Completed - Teardown Started
+  Teardown Ended
+  
+  test_fixtures.py::TestCases::test_fileData File Written with Data.
+  PASSED
+   File Available for reading
+  
+  
+  ======================================================================== 6 passed, 1 xfailed in 0.02s ========================================================================
+  ```
+  
 
   

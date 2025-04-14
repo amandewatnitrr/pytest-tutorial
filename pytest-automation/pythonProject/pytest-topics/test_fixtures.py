@@ -2,6 +2,7 @@ import pytest
 
 days_1 = ['mon', 'tue', 'wed']
 days_2 = ['fri', 'sat', 'sun']
+filename = "file1.txt"
 
 class TestCases:
 
@@ -72,6 +73,22 @@ class TestCases:
             assert len(days_1 + days_2_manipulation) == len(teardown_setup + days_2)
         except Exception as e:
             print(f"Unexpected Error Occurred: {e}")
+
+    @pytest.fixture()
+    def file_write(self):
+        f = open(filename, 'w')
+        print("File Written with Data.")
+        f.write("Pytest is good.")
+        f.close()
+        f = open(filename, 'r+')
+        yield f
+        print("\n File Available for reading")
+
+    def test_fileData(self, file_write):
+        try:
+            assert (file_write.readline()) == "Pytest is good."
+        except Exception as e:
+            print(f"Unknown error occured {e}.")
 
 
 if __name__ == '__main__':
