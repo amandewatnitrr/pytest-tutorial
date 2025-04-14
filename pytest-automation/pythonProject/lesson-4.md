@@ -1244,3 +1244,121 @@
   
 - And, here we see that the `test_factory` test has passed. basically, we created a fixture that returns a complete function in itself, that will return a value, based on the input provided to the fixture.
 
+### Paramatrizing from Fixtures
+
+- Let's start with an example itself. We have create a fixture `return_tuple_list` for test `test_typeIntype.
+
+  `test_introspect.py`
+
+  ```python
+  import pytest
+  
+  digits = [1,2,3,4,5,6,7,8,9,0]
+  
+  class Testcases:
+  
+      def test_addition(self,function_detail):
+          assert 1 + 1 == 2
+  
+      def test_factory(self,return_tuple_or_list):
+          assert type(return_tuple_or_list('tuple')) == tuple
+          assert type(return_tuple_or_list('list')) == list
+  
+      def test_typeIntype(self,return_tuple_list):
+          assert (type(return_tuple_list)) in [tuple,list]
+  
+  
+  if __name__ == '__main__':
+      test = Testcases()
+  ```
+  
+  `conftest.py`
+
+  ```python
+  import pytest
+  import os
+  
+  def pytest_configure():
+      pytest.days_1 = ['mon', 'tue', 'wed']
+      pytest.days_2 = ['fri', 'sat', 'sun']
+  
+  
+  @pytest.fixture()
+  def setup_city():
+      print("Fixture under execution.")
+      city = ['Singapore','Delhi','Chicago','Almaty']
+      return city
+  
+  @pytest.fixture()
+  def file_write():
+      pytest.filename = "file1.txt"
+      f = open(pytest.filename, 'w')
+      print("File Written with Data.")
+      f.write("Pytest is good.")
+      f.close()
+      f = open(pytest.filename, 'r+')
+      yield f
+      print("\n File Available for reading")
+      f.close()
+      os.remove(pytest.filename)
+      print("\n File is deleted after, test execution.")
+  
+  
+  @pytest.fixture()
+  def function_detail(request):
+      print(f"\nStarting test: {request.node.name}")
+      print(f"\nIn Module: {request.module.__name__}")
+      print(f"\n Request Scope: {request.scope}")
+      print(f"\n Function Name: {request.function.__name__}")
+      digits =  getattr(request.module, "digits")
+      print(f"\n Digits: {digits}")
+      yield
+      print(f"\nFinished test: {request.node.name}")
+  
+  @pytest.fixture()
+  def return_tuple_or_list():
+      def get_dt(name):
+          if name == 'list':
+              return [1,2,3]
+          elif name == 'tuple':
+              return (1,2,3)
+          else:
+              raise ValueError("Invalid type requested")
+      return get_dt
+  
+  @pytest.fixture(params=[(1,2),[3,4]], ids=['tuple', 'list'])
+  def return_tuple_list(request):
+      return request.param
+  ```
+  
+- The test here will be called twice as it has 2 inputs, and hence it has both the type, as it has a list and a tuple. It will pass both the times. And, when executed the output looks something like this:
+
+  ```bash
+  pytest -v -s test_introspect.py                                             ✔  at 23:52:56  
+  ========================================================================== test session starts ==========================================================================
+  platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: django-4.5.2
+  collected 4 items                                                                                                                                                       
+  
+  test_introspect.py::Testcases::test_addition 
+  Starting test: test_addition
+  
+  In Module: test_introspect
+  
+   Request Scope: function
+  
+   Function Name: test_addition
+  
+   Digits: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+  PASSED
+  Finished test: test_addition
+  
+  test_introspect.py::Testcases::test_factory PASSED
+  test_introspect.py::Testcases::test_typeIntype[tuple] PASSED
+  test_introspect.py::Testcases::test_typeIntype[list] PASSED
+  
+  =========================================================================== 4 passed in 0.01s ===========================================================================
+  ```

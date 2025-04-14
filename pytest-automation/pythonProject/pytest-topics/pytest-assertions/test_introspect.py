@@ -11,6 +11,9 @@ class Testcases:
         assert type(return_tuple_or_list('tuple')) == tuple
         assert type(return_tuple_or_list('list')) == list
 
+    def test_typeIntype(self,return_tuple_list):
+        assert (type(return_tuple_list)) in [tuple,list]
+
 
 if __name__ == '__main__':
     test = Testcases()

@@ -48,3 +48,7 @@ def return_tuple_or_list():
         else:
             raise ValueError("Invalid type requested")
     return get_dt
+
+@pytest.fixture(params=[(1,2),[3,4]], ids=['tuple', 'list'])
+def return_tuple_list(request):
+    return request.param
