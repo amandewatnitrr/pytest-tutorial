@@ -5,11 +5,6 @@
 - For this we will be using something called `hooks`, Initializtion hooks in pytest.
 - And, we need to use a special function `pytest_addoption` function and, that works in conjunction with the fixture. `conftest.py` file which we have seen earlier in the fixture topic in that file, we need to define a function.
 - And, the other thing which we need to take note of is that the `conftest.py` file we define should be in the root folder of our project.
-
-```python
-
-```
-
 - We will need to pass the `parser` parameter to the `pytest_addoption(parser)` function which will actually pass the command line arguments, and give us the options that we want.
 - Let's try to understand this through an example:
 
@@ -63,45 +58,36 @@
 - `pytestconfig` is again special fixture in pytest using this we can read the command line option that we mention to be read from the command line using the `parser` attribute.
 - Once we execute this, we will get the following output for the given options:
 
-	<details>
-
-	<summary>Example for default cmdopt - when no value is passed</summary>
-
 	```bash
-	$  pytest -v -s test_customization.py                                             ✔  at 18:06:05  
-	========================================================================== test session starts ==========================================================================
-	platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
-	cachedir: .pytest_cache
-	rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
-	configfile: pytest.ini
-	plugins: django-4.5.2
-	collected 1 item                                                                                                                                                        
-	
-	test_customization.py::TestCases::test_readCmdOpt Reading the config file: QA Lab Details
-	PASSED
-	=========================================================================== 1 passed in 0.00s ===========================================================================
+	 $  pytest -v -s test_customization.py                                             ✔  at 18:06:05  
+	 ========================================================================== test session starts ==========================================================================
+	 platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+	 cachedir: .pytest_cache
+	 rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+	 configfile: pytest.ini
+	 plugins: django-4.5.2
+	 collected 1 item                                                                                                                                                        
+	 
+	 test_customization.py::TestCases::test_readCmdOpt Reading the config file: QA Lab Details
+	 PASSED
+	 =========================================================================== 1 passed in 0.00s ===========================================================================
 	```
  
-	</details>
-
-	<details>
-
-	<summary>Example when prod is passed to cmdopt option</summary>
-
 	```bash
-	pytest -v -s test_customization.py --cmdopt=prod            
-	========================================================================== test session starts ==========================================================================
-	platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
-	cachedir: .pytest_cache
-	rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
-	configfile: pytest.ini
-	plugins: django-4.5.2
-	collected 1 item                                                                                                                                                        
-	
-	test_customization.py::TestCases::test_readCmdOpt Reading the config file: Prod Lab Details
-	PASSED
-	=========================================================================== 1 passed in 0.00s ===========================================================================
+	 pytest -v -s test_customization.py --cmdopt=prod            
+	 ========================================================================== test session starts ==========================================================================
+	 platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+	 cachedir: .pytest_cache
+	 rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+	 configfile: pytest.ini
+	 plugins: django-4.5.2
+	 collected 1 item                                                                                                                                                        
+	 
+	 test_customization.py::TestCases::test_readCmdOpt Reading the config file: Prod Lab Details
+	 PASSED
+	 =========================================================================== 1 passed in 0.00s ===========================================================================
 	```
-
-	</details>
-	
+ 
+- One example, where we have mentioned no option, it took `qa` as a default option. It reads the `qa.prop` file.
+- While, in the other where we have given them command line argument `--cmdopt=prod`, it has specifically read the 
+  `prod.prop` file.
