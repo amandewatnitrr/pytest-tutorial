@@ -2,7 +2,7 @@
 
 - When we want to test with multiple environments, we can just toss in some arguments in our commandline and, we can actually design our test in such a way that based on the command line arguments, we can execute our test in production or development if we want to.
 - In this chapter, we will be looking into how we can pass in command line arguments to our pytest test functions.
-- For this we will be using something called `hooks`, Initializtion hooks in pytest.
+- For this we will be using something called `hooks`, Initialization hooks in pytest.
 - And, we need to use a special function `pytest_addoption` function and, that works in conjunction with the fixture. `conftest.py` file which we have seen earlier in the fixture topic in that file, we need to define a function.
 - And, the other thing which we need to take note of is that the `conftest.py` file we define should be in the root folder of our project.
 - We will need to pass the `parser` parameter to the `pytest_addoption(parser)` function which will actually pass the command line arguments, and give us the options that we want.
@@ -91,3 +91,128 @@
 - One example, where we have mentioned no option, it took `qa` as a default option. It reads the `qa.prop` file.
 - While, in the other where we have given them command line argument `--cmdopt=prod`, it has specifically read the 
   `prod.prop` file.
+
+- This way we can use the command line to pass arguments or inputs to the tests.
+
+## Configuring Pytest
+
+- Many pytest settings can be set in a configuration file, which by convention resides in the root directory of your repository.
+
+### `pytest.ini`
+
+- `pytest.ini` files take precedence over other files, even when empty.
+- Must be placed in the root folder of the project.
+- This is the most common way of configuring the pytests.
+- Example:
+
+	```ini
+	[pytest]
+	addopts = -v --color=yes
+	testpaths = tests integration_tests
+	norecursedirs = .venv node_modules
+	markers =
+	    slow: marks tests as slow
+	    integration: integration tests
+	python_files = test_*.py *_test.py
+	python_classes = Test* *Suite
+	python_functions = test_* check_*
+	xfail_strict = true
+	```
+ 
+### `pyproject.toml`
+
+- pyproject.toml are considered for configuration when they contain a tool.pytest.ini_options table.
+- Example:
+
+	```toml
+	[tool.pytest.ini_options]
+	addopts = ["-v", "--tb=short"]
+	testpaths = ["tests"]
+	markers = [
+	    "smoke: quick validation tests",
+	    "performance: benchmark tests"
+	]
+	filterwarnings = [
+	    "error::UserWarning"
+	]
+	
+	[tool.coverage.run]
+	source = ["src"]
+	```
+ 
+### `tox.ini`
+
+- `tox.ini` files are the configuration files of the tox project, and can also be used to hold pytest configuration if 
+  they have a [pytest] section.
+- Example:
+
+	```ini
+	[tox]
+	envlist = py38, py39
+	
+	[pytest]
+	addopts = --junitxml=reports/junit.xml
+	python_files = test_*.py
+	minversion = 6.0
+	
+	[testenv]
+	deps = pytest
+	commands = pytest tests/
+	```
+
+### `setup.cfg`
+
+- `setup.cfg` files are general purpose configuration files, used originally by distutils (now deprecated) and 
+  setuptools, and can also be used to hold pytest configuration if they have a [tool:pytest] section.
+- Examples:
+
+	```ini
+	[metadata]
+	name = myproject
+	
+	[tool:pytest]
+	addopts = --durations=10
+	norecursedirs = .* venv
+	```
+ 
+<table>
+	<tr>
+		<th>Format</th>
+		<th>File Extension</th>
+		<th>Syntax</th>
+		<th>Pros</th>
+		<th>cons</th>
+	</tr>
+	<tr>
+		<td><code>INI</code></td>
+		<td> <code>.ini</code></td>
+		<td>Simple</td>
+		<td>Wide Support, Human Readable</td>
+		<td>Limited Datatypes</td>
+	</tr>
+	<tr>
+		<td><code>TOML</code></td>
+		<td> <code>.toml</code></td>
+		<td>Modern</td>
+		<td>PEP 621 Standard, Rich types</td>
+		<td>Newer Format</td>
+	</tr>
+	<tr>
+		<td><code>setup.cfg</code></td>
+		<td> <code>.cfg</code></td>
+		<td>Legacy</td>
+		<td>Shared with setuptools</td>
+		<td>Depreceated for Pytest</td>
+	</tr>
+	<tr>
+		<td><code>tox.ini</code></td>
+		<td> <code>.ini</code></td>
+		<td>Shared</td>
+		<td>Good for tox integration</td>
+		<td>Not pytest specific</td>
+	</tr>
+</table>
+
+- It is mostly recommended to use `pytest.ini` file, for configuring the pytests. If you want to go through the 
+  details of some of the options available for `pytest.ini`, we recommend you to go to the documentation page to 
+  explore more on that.
