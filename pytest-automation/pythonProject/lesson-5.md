@@ -314,4 +314,120 @@
 	```
 
 - Using this way you can do a real world Data Driven Testing.
+
+## Using Configuration Files
+
+- So, far we have used fixtures for data driven tests. Now, we will use what we have learnt to start utilising the 
+  config file for the same purpose.
+- This will be really helpful as all type of projects need some type of configuration.
+- It it's a test automation project, we need to test against different environments, to say the least each 
+  environment can have different url, login, passwords and, things like that.
+- Config files are important for test automation project as we cannot hardcode the values like login IDs, username 
+  or password. Also, there can be too many configurations in some of these cases which we wdon't want to include in 
+  the code, which become cumbersome to edit it later in multiple places.
+- If it's within the code, we don't want to edit the code for editing the configurations.
+- As, we have discussed in python we can have config files in different formats like `JSON`, `HTML`, `YAML` or `ini` 
+  format.
+- In this particular section, we will see how we can readan `*.ini` format file in our test automation.
+
+- Let's start by first creating our config file `qa.ini`
+
+	`qa.ini`
+	
+	```ini
+	[gmail]
+	url = qa.gmail.com
+	user = gamil_user1
+	pass = gamil_pass1
+	
+	[outlook]
+	url = qa.outlook.com
+	user = outlook_user1
+	pass = outlook_pass1
+	```
+ 
+- In the `utils` folder create  we wil put our config parser. Let's name it as `myconfigparser.py`.
+- Here, we could have written this program following OOPs, like for example creating a class, and all those things, 
+  but for learning purpose we are simplifying it here.
+
+	`myconfigparser.py`
+	
+	```python
+	import configparser
+	from pathlib import Path
+	
+	cfgFile = 'qa.ini'
+	cfgFileDirectory = 'config'
+	
+	# Here, we initialise the configparser module, and will use the config variable to read the config file.
+	config = configparser.ConfigParser()
+	
+	
+	BASE_DIR = Path(__file__).resolve().parent.parent
+	CONFIG_FILE = BASE_DIR.joinpath(cfgFileDirectory).joinpath(cfgFile)
+	
+	config.read(CONFIG_FILE)
+	
+	def getGmailUrl():
+	    return config['gmail']['url']
+	
+	def getGmailUsr():
+	    return config['gmail']['user']
+	
+	def getGmailPass():
+	    return config['gmail']['pass']
+	
+	def getOutlookUrl():
+	    return config['outlook']['url']
+	
+	def getOutlookUsr():
+	    return config['outlook']['user']
+	
+	def getOutlookPass():
+	    return config['outlook']['pass']
+	```
+ 
+- Once, this is done we can writting our testcases. Create a test file named `test_getConfigData.py`, and write down 
+  a simple test.
+
+	`test_getConfigData.py`
+
+	```python
+	import pytest
+	from pytest_topics.utils.myconfigparser import *
+	
+	class TestCases:
+	
+	    def test_getGmailUrl(self):
+	        try:
+	            print(f"Gmail URL: {getGmailUrl()}")
+	            assert getGmailUrl() == 'qa.gmail.com'
+	        except Exception as e:
+	            print(f"Unknown Error Occured: {e}.")
+	
+	
+	
+	if __name__ == '__main__':
+	    test = TestCases()
+	```
+ 
+- Now, execute the test, and see if we can access the config data or not.
+
+	```bash
+	$ pytest -v -s test_getConfigData.py                                                  ✔  at 00:39:27  
+	============================================================================ test session starts =============================================================================
+	platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+	cachedir: .pytest_cache
+	rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+	configfile: pytest.ini
+	plugins: django-4.5.2
+	collected 1 item                                                                                                                                                             
+	
+	test_getConfigData.py::TestCases::test_getGmailUrl Gmail URL: qa.gmail.com
+	PASSED
+	============================================================================= 1 passed in 0.01s ==============================================================================
+	```
+
+
+
   
