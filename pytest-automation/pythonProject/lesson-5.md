@@ -227,9 +227,9 @@
 - We can do the same in `pytest` using `@pytest.mark.paramaterize()` to pass data after reading from the file.
 - Let's start by creating a python package named `utils`.
 
-  ![](./imgs/Screenshot 2025-04-15 at 9.20.50 PM.png)
+  ![](./imgs/Screenshot%202025-04-15%20at%209.20.50%E2%80%AFPM.png)
   <br/>
-  ![](./imgs/Screenshot 2025-04-15 at 9.23.48 PM.png)
+  ![](./imgs/Screenshot%202025-04-15%20at%209.23.48%E2%80%AFPM.png)
 
 - And, we will have a csv file inside the `config` folder, you will find it in our doler structure if you look 
   carefully. You can place it another place also, we are just doing it for our own convinence and organizing purpose.
@@ -244,7 +244,7 @@
 	25,Ayush,4.2,Raipur
 	```
  
-- Now, in utils folder create a `utils.py` file where we will read this csv file.
+- Now, in `utils` folder create a `utils.py` file where we will read this csv file.
 
 	`utils.py`
 	
