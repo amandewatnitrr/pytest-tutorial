@@ -1396,8 +1396,8 @@
 - This is used in scenarios where we have Global Configurations that we need to test or cross-test dependencies.
 
 > [!IMPORTANT]
-> The Scope Hierarchy is as follows:
-> `session > package > module > class > function`
+> The Scope Hierarchy is as follows: <br/>
+> `session > package > module > class > function` <br/>
 > Higher scoped fixtures are instantiated first.
 > Fixtures can depend on higher or same scopes but not lower.
 
