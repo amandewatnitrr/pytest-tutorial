@@ -7,9 +7,7 @@
 
 - Let's try to understand this through an example:
 
-  <details>
-  
-  <summary> <b>test_paramaterize.py</b> </summary>
+  `test_paramaterize.py`
   
     ```python
     import pytest	
@@ -30,10 +28,11 @@
 	    test = TestCase()
 	    test.run_tests()
    ```
-  </details>
   
 - Once you execute the test cases you see something like this:
 
+  <details>
+  <summary><b>Output</b></summary>
     ```bash
 	 $ pytest -v test_paramaterize.py                                                   1 ✘  at 20:58:38  
 	============================================================================ test session starts ============================================================================
@@ -66,6 +65,7 @@
 	FAILED test_paramaterize.py::TestCase::test_greater[10-9] - AssertionError: 9 is not greater than 10
 	======================================================================== 1 failed, 4 passed in 0.04s ========================================================================
     ```
+  </details>
 
 - Here, it clearly says that 4 tests have passed while 1 failed. Even though we just have one test case written, but is being called for each input individually. As, the parameters are being initialized everytime with the new set.
 - Let's see this another example to see how powerful parameterization is:
@@ -116,6 +116,9 @@
 - When you execute this, it will collect 2 test cases and, this 2 test cases will have a total of 8 inputs coming to them. So, 8 tests will be performed and, out of which 7 will pass and, 1 fails.
 - Below, is the output of the execution shared:
 
+  <details>
+  <summary><b>Output</b></summary>
+  
   ```bash
   $ pytest -v test_paramaterize.py                                               ✔  took 3s   at 21:16:31  
   ============================================================================ test session starts ============================================================================
@@ -151,6 +154,7 @@
   FAILED test_paramaterize.py::TestCase::test_greater[10-9] - AssertionError: 9 is not greater than 10
   ======================================================================== 1 failed, 7 passed in 0.05s ========================================================================
   ```
+  </details>
   
 ## Fixtures in Pytest
 
@@ -189,6 +193,8 @@
 
 - If you see the debug logs carefully you can see that the fixtures has initialised everything for us already, and the values are directly being used by the testcases.
 
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python -X pycache_prefix=/Users/akd/Library/Caches/JetBrains/PyCharmCE2024.2/cpython-cache /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pydev/pydevd.py --multiprocess --qt-support=auto --client 127.0.0.1 --port 49537 --file /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pycharm/_jb_pytest_runner.py --path /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_fixtures.py 
   Testing started at 12:05 pm ...
@@ -206,6 +212,7 @@
   
   Process finished with exit code 0
   ```
+  </details>
 
 - Also, note that this time the fixture is called by our test function, and then used the return value from the function.
 - Let's try something different, let's say we have used fixtures, and we want to use the value of these fizxtures while they are being manipulated before assertion happens. Let's try to understand this with example below:
@@ -251,6 +258,8 @@
   
 - Now, when we debug this, this is what we see:
 
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python -X pycache_prefix=/Users/akd/Library/Caches/JetBrains/PyCharmCE2024.2/cpython-cache /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pydev/pydevd.py --multiprocess --qt-support=auto --client 127.0.0.1 --port 49662 --file /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pycharm/_jb_pytest_runner.py --path /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_fixtures.py 
   Testing started at 1:13 pm ...
@@ -272,6 +281,7 @@
   
   Process finished with exit code 0
   ```
+  </details>
 
 ### Implementing Fixtures using Decorators
 
@@ -327,6 +337,8 @@
 
 - If you look atn the output for this, we see the following:
 
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   $ pytest -v -s test_fixtures.py                                        4 ✘  pythonProject   at 13:34:15  
   ============================================================================ test session starts ============================================================================
@@ -348,6 +360,7 @@
   
   ============================================================================= 3 passed in 0.00s =============================================================================
   ```
+  </details>
 
 - The fixture was also called for the test `test_alwaysTrue` by the marker and, not by the function.
 - But, the problem in this scenario is we cannot use the return value from the fixture when called using marker or decorator.
@@ -402,6 +415,8 @@
 
 - Here, in the output below you can clearly see that, we are inside the fixture, as the statement prints `Fixture under execution`. But, when tried to access it's value, it says undefined.
   
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   Fixture under execution.
   XFAILthe
@@ -416,6 +431,7 @@
   
   test_fixtures.py:40: NameError
   ```
+  </details>
   
 ### Setup/Teardown in Fixtures
 
@@ -499,6 +515,8 @@
 - Everything above and including the `yield` statement is the setup, while everything following it is part of teardown.
 - Once you execute this, you will see the following output:
 
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   $ pytest -v -s test_fixtures.py                                          ✔  pythonProject   at 16:36:14  
   ============================================================================ test session starts ============================================================================
@@ -524,6 +542,7 @@
   Teardown Ended
   ======================================================================= 4 passed, 1 xfailed in 0.02s ========================================================================
   ```
+  </details>
   
 ### Multiple Fixtures
 
@@ -612,6 +631,8 @@
 
 - Once executed, you get the following output:
 
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   $ pytest -v -s test_fixtures.py                                      127 ✘  pythonProject   at 16:52:33  
   ============================================================================ test session starts ============================================================================
@@ -642,6 +663,7 @@
   Teardown Ended
   ======================================================================= 5 passed, 1 xfailed in 0.01s ========================================================================
   ```
+  </details>
   
 ### Teardown Example for File Operations
 
@@ -751,6 +773,8 @@
 
 - Below is the output:
 
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   $  pytest -v -s test_fixtures.py                                                             ✔  at 18:13:44  
   ============================================================================ test session starts =============================================================================
@@ -788,6 +812,7 @@
    File is deleted after, test execution.
   ======================================================================== 6 passed, 1 xfailed in 0.02s ========================================================================
   ```
+  </details>
 
 
 ### Pytest: Sharing Fixtures
@@ -918,6 +943,8 @@
 
 - As, we can see we have shifted various fixtures to the `conftest.py` file, and if you run this with the changes done, it still executes successfully as expected the same way. Here's the output to the same:
 
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   $ pytest -v -s test_fixtures.py                                                  ✔  at 21:29:47  
   ========================================================================== test session starts ==========================================================================
@@ -955,6 +982,7 @@
    File is deleted after, test execution.
   ===================================================================== 6 passed, 1 xfailed in 0.02s ======================================================================
   ```
+  </details>
 
 > [!NOTE]
 > Fixtures can be overriden from test module level.
@@ -965,6 +993,8 @@
 
 - Let's trace the fixture execution through the example we just used.
 
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   $ pytest -v -s test_fixtures.py --setup-show                                              ✔  at 22:05:05  
   ========================================================================== test session starts ==========================================================================
@@ -998,6 +1028,7 @@
           TEARDOWN F _django_clear_site_cache
           TEARDOWN F _dj_autoclear_mailbox
   ```
+  </details>
   
 - This is a small portion of the output that we got, we clearly see here `SETUP F setup_city`, that the setup for fixture has been done.
 - On the next line it clearly specifies the following, here at the end you can find `setup_city` in the fixture used list, with it's respective values. Not all the setup mentioned here are not needed.
@@ -1041,6 +1072,8 @@
   
 - Once, you execute this you see the following output:
 
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   $  pytest -v -s test_introspect.py                                          ✔  at 22:50:05  
   ========================================================================== test session starts ==========================================================================
@@ -1061,6 +1094,7 @@
   Finished test: test_addition
   =========================================================================== 1 passed in 0.01s ===========================================================================
   ```
+  </details>
   
 - Here, it clearly shows:
   - `test function name` for `request.node.name`.
@@ -1104,6 +1138,8 @@
   
 - Once executed, you will see the following output:
 
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   $ pytest -v -s test_introspect.py                                          ✔  at 22:54:57  
   ========================================================================== test session starts ==========================================================================
@@ -1128,6 +1164,7 @@
   Finished test: test_addition  
   =========================================================================== 1 passed in 0.01s ===========================================================================
   ```
+  </details>
   
 
 - And, we can also manipulate the data and yield it to return the value for further usage depending upon the needs.
@@ -1217,6 +1254,8 @@
   
 - Once you execute this, you will see the following output:
 
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   $ pytest -v -s test_introspect.py                                              1 ✘  at 23:32:33  
   ========================================================================== test session starts ==========================================================================
@@ -1244,6 +1283,7 @@
   
   =========================================================================== 2 passed in 0.01s ===========================================================================
   ```
+  </details>
   
 - And, here we see that the `test_factory` test has passed. basically, we created a fixture that returns a complete function in itself, that will return a value, based on the input provided to the fixture.
 
@@ -1336,6 +1376,8 @@
   
 - The test here will be called twice as it has 2 inputs, and hence it has both the type, as it has a list and a tuple. It will pass both the times. And, when executed the output looks something like this:
 
+  <details>
+  <summary><b>Output</b></summary>
   ```bash
   pytest -v -s test_introspect.py                                             ✔  at 23:52:56  
   ========================================================================== test session starts ==========================================================================
@@ -1365,6 +1407,7 @@
   
   =========================================================================== 4 passed in 0.01s ===========================================================================
   ```
+  </details>
   
 ### Fixture Scope
 
