@@ -35,7 +35,7 @@
           ├── imgs
           │   └── BLOG_PyTest-–-A-Python-Solution-For-Test-Automation-1024x535 1.png
           ├── lesson-1.md
-          └── pytest-topics
+          └── pytest_topics
               ├── __init__.py
               ├── __pycache__
               │   ├── __init__.cpython-311.pyc
@@ -65,19 +65,19 @@
 - Now, to run the test, you can run the command, from `pythonProject` directory:
   
   ```bash
-  $ pytest pytest-topics
+  $ pytest pytest_topics
   ```
   
 - You will see output something like this:
 
   ```bash
-  $ pytest pytest-topics
+  $ pytest pytest_topics
   =================================================================== test session starts ===================================================================
   platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0
   rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
   collected 1 item                                                                                                                                          
 
-  pytest-topics/test_module01.py .                                                                                                                    [100%]
+  pytest_topics/test_module01.py .                                                                                                                    [100%]
   ==================================================================== 1 passed in 0.00s ====================================================================
   ```
   
@@ -98,13 +98,13 @@
   The output looks something like this:
 
   ```bash
-  $ pytest pytest-topics
+  $ pytest pytest_topics
   ==================================================================== test session starts ====================================================================
   platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0
   rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
   collected 2 items                                                                                                                                           
 
-  pytest-topics/test_module01.py .F                                                                                                                     [100%]
+  pytest_topics/test_module01.py .F                                                                                                                     [100%]
 
   ========================================================================= FAILURES ==========================================================================
   ________________________________________________________________________ test_false _________________________________________________________________________
@@ -113,9 +113,9 @@
   >       assert 5 + 5 != 10
   E       assert (5 + 5) != 10
 
-  pytest-topics/test_module01.py:5: AssertionError
+  pytest_topics/test_module01.py:5: AssertionError
   ================================================================== short test summary info ==================================================================
-  FAILED pytest-topics/test_module01.py::test_false - assert (5 + 5) != 10
+  FAILED pytest_topics/test_module01.py::test_false - assert (5 + 5) != 10
   ================================================================ 1 failed, 1 passed in 0.01s ================================================================
   ```
   
@@ -140,13 +140,13 @@
     The output looks something like this:
     
   ```bash
-  $  pytest pytest-topics
+  $  pytest pytest_topics
   ======================================================================= test session starts =======================================================================
   platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0
   rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
   collected 3 items                                                                                                                                                 
   
-  pytest-topics/test_module01.py .F.                                                                                                                          [100%]
+  pytest_topics/test_module01.py .F.                                                                                                                          [100%]
   
   ============================================================================ FAILURES =============================================================================
   ________________________________________________________________________ test_subtraction _________________________________________________________________________
@@ -156,9 +156,9 @@
   E       AssertionError: Intentional failure 1
   E       assert (5 - 5) != 0
   
-  pytest-topics/test_module01.py:5: AssertionError
+  pytest_topics/test_module01.py:5: AssertionError
   ===================================================================== short test summary info =====================================================================
-  FAILED pytest-topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
+  FAILED pytest_topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
   =================================================================== 1 failed, 2 passed in 0.02s ===================================================================
   ```
   
@@ -166,16 +166,16 @@
 - You can also run the same in verbose mode by running the command:
   
   ```bash
-  $  pytest -v pytest-topics                                1 ✘  pythonProject   at 21:15:52  
+  $  pytest -v pytest_topics                                1 ✘  pythonProject   at 21:15:52  
   ======================================================================= test session starts =======================================================================
   platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
   cachedir: .pytest_cache
   rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
   collected 3 items                                                                                                                                                 
   
-  pytest-topics/test_module01.py::test_addition PASSED                                                                                                        [ 33%]
-  pytest-topics/test_module01.py::test_subtraction FAILED                                                                                                     [ 66%]
-  pytest-topics/test_module01.py::test_integer_division PASSED                                                                                                [100%]
+  pytest_topics/test_module01.py::test_addition PASSED                                                                                                        [ 33%]
+  pytest_topics/test_module01.py::test_subtraction FAILED                                                                                                     [ 66%]
+  pytest_topics/test_module01.py::test_integer_division PASSED                                                                                                [100%]
   
   ============================================================================ FAILURES =============================================================================
   ________________________________________________________________________ test_subtraction _________________________________________________________________________
@@ -185,9 +185,9 @@
   E       AssertionError: Intentional failure 1
   E       assert (5 - 5) != 0
   
-  pytest-topics/test_module01.py:5: AssertionError
+  pytest_topics/test_module01.py:5: AssertionError
   ===================================================================== short test summary info =====================================================================
-  FAILED pytest-topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
+  FAILED pytest_topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
   =================================================================== 1 failed, 2 passed in 0.01s ===================================================================
   ```
 
@@ -230,9 +230,9 @@
 - Click on the `Run 'pytest in test_module01'` option. You will see logs like this:<br/><br/>
 
   ```bash
-  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pycharm/_jb_pytest_runner.py --path /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_module01.py 
+  /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pycharm/_jb_pytest_runner.py --path /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest_topics/test_module01.py 
   Testing started at 9:43 pm ...
-  Launching pytest with arguments /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_module01.py --no-header --no-summary -q in /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics
+  Launching pytest with arguments /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest_topics/test_module01.py --no-header --no-summary -q in /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest_topics
   
   ============================= test session starts ==============================
   collecting ... collected 3 items
@@ -269,16 +269,16 @@
 - So, for now we will consider the recent test output generated by using the command `pytest -v pytest-topics`.<br/><br/>
 
   ```bash
-  $ pytest -v pytest-topics
+  $ pytest -v pytest_topics
   ================================================================== test session starts ==================================================================
   platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
   cachedir: .pytest_cache
   rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
   collected 3 items                                                                                                                                       
   
-  pytest-topics/test_module01.py::test_addition PASSED                                                                                              [ 33%]
-  pytest-topics/test_module01.py::test_subtraction FAILED                                                                                           [ 66%]
-  pytest-topics/test_module01.py::test_integer_division PASSED                                                                                      [100%]
+  pytest_topics/test_module01.py::test_addition PASSED                                                                                              [ 33%]
+  pytest_topics/test_module01.py::test_subtraction FAILED                                                                                           [ 66%]
+  pytest_topics/test_module01.py::test_integer_division PASSED                                                                                      [100%]
   
   ======================================================================= FAILURES ========================================================================
   ___________________________________________________________________ test_subtraction ____________________________________________________________________
@@ -288,9 +288,9 @@
   E       AssertionError: Intentional failure 1
   E       assert (5 - 5) != 0
   
-  pytest-topics/test_module01.py:6: AssertionError
+  pytest_topics/test_module01.py:6: AssertionError
   ================================================================ short test summary info ================================================================
-  FAILED pytest-topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
+  FAILED pytest_topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
   ============================================================== 1 failed, 2 passed in 0.01s ==============================================================
   ```
 

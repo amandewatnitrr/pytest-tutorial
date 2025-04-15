@@ -225,8 +225,93 @@
 - In a real environment, in an actual automation framework, we need to read data  or input values from file and 
   actually work on top of that.
 - We can do the same in `pytest` using `@pytest.mark.paramaterize()` to pass data after reading from the file.
-  - Let's start by creating a python package named `utils`.
+- Let's start by creating a python package named `utils`.
 
-    ![](./pytest_automation)
+  ![](./imgs/Screenshot 2025-04-15 at 9.20.50 PM.png)
+  <br/>
+  ![](./imgs/Screenshot 2025-04-15 at 9.23.48 PM.png)
 
+- And, we will have a csv file inside the `config` folder, you will find it in our doler structure if you look 
+  carefully. You can place it another place also, we are just doing it for our own convinence and organizing purpose.
+
+- Here's our csv file for you:
+
+	```csv
+	age,name,salary(lpa),city
+	24,aman,21,banaglore
+	25,aziz,25,Gurgaon
+	26,Harikesh,26,Bangalore
+	25,Ayush,4.2,Raipur
+	```
+ 
+- Now, in utils folder create a `utils.py` file where we will read this csv file.
+
+	`utils.py`
+	
+	```python
+	import csv
+	from pathlib import Path
+	
+	dataFile = "data.csv"
+	cfgFileDir = 'config'
+	
+	BASE_DIR = Path(__file__).resolve().parent.parent
+	DATA_FILE = BASE_DIR.joinpath(cfgFileDir).joinpath(dataFile)
+	
+	def get_data():
+	    with open(DATA_FILE,'r+') as f:
+	        reader = csv.reader(f)
+	        next(reader) # Skips the first row, as it has the header
+	        data = [tuple(row) for row in reader]
+	
+	    return data
+	
+	print(get_data())
+	```
+
+- When this program `utils.py` is executed, you see it return a list of tuples.
+
+  ![](./imgs/Screenshot%202025-04-15%20at%209.41.31%E2%80%AFPM.png)
+
+- So, now we know our function is working properly. Now, next thing we need to do is write our test here.
+
+	`test_dataProvider.py`
+	
+	```python
+	import pytest
+	from pytest_topics.utils.utils import get_data
+	
+	class TestCases:
+	
+	    @pytest.mark.parametrize("a,b,c,d",get_data())
+	    def test_checkFileData(self,a,b,c,d):
+	        print(f"{b}'s  age is {a}.")
+	```
+ 
+- Once you execute, you get the following output:
+
+	```bash
+	 pytest -v -s test_dataProvider.py                                                 ✔  at 21:52:00  
+	============================================================================ test session starts =============================================================================
+	platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+	cachedir: .pytest_cache
+	rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+	configfile: pytest.ini
+	plugins: django-4.5.2
+	collecting ... [('24', 'aman', '21', 'banaglore'), ('25', 'aziz', '25', 'Gurgaon'), ('26', 'Harikesh', '26', 'Bangalore'), ('25', 'Ayush', '4.2', 'Raipur')]
+	collected 4 items                                                                                                                                                            
+	
+	test_dataProvider.py::TestCases::test_checkFileData[24-aman-21-banaglore] aman's  age is 24.
+	PASSED
+	test_dataProvider.py::TestCases::test_checkFileData[25-aziz-25-Gurgaon] aziz's  age is 25.
+	PASSED
+	test_dataProvider.py::TestCases::test_checkFileData[26-Harikesh-26-Bangalore] Harikesh's  age is 26.
+	PASSED
+	test_dataProvider.py::TestCases::test_checkFileData[25-Ayush-4.2-Raipur] Ayush's  age is 25.
+	PASSED
+	
+	============================================================================= 4 passed in 0.01s ==============================================================================
+	```
+
+- Using this way you can do a real world Data Driven Testing.
   

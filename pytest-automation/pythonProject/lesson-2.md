@@ -75,7 +75,7 @@
     ====================================================================== test session starts =======================================================================
     platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
     cachedir: .pytest_cache
-    rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics
+    rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest_topics
     collected 12 items                                                                                                                                               
     
     pytest-assertions/test_module02.py::TestCases::test_greater[9-5] PASSED                                                                                    [  8%]
@@ -155,21 +155,21 @@
     rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
     collected 15 items                                                                                                                                               
     
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[9-5] PASSED                                                                      [  6%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] FAILED                                                                      [ 13%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-4] PASSED                                                                      [ 20%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[10-5] PASSED                                                                     [ 26%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_true PASSED                                                                              [ 33%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_cmpr_string_char PASSED                                                                  [ 40%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[9-5] PASSED                                                                       [ 46%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] FAILED                                                                       [ 53%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-4] PASSED                                                                       [ 60%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] FAILED                                                                      [ 66%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_find_in_string PASSED                                                                    [ 73%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_is_not_in_string PASSED                                                                  [ 80%]
-    pytest-topics/test_module01.py::test_addition PASSED                                                                                                       [ 86%]
-    pytest-topics/test_module01.py::test_subtraction FAILED                                                                                                    [ 93%]
-    pytest-topics/test_module01.py::test_integer_division PASSED                                                                                               [100%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[9-5] PASSED                                                                      [  6%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] FAILED                                                                      [ 13%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-4] PASSED                                                                      [ 20%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[10-5] PASSED                                                                     [ 26%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_true PASSED                                                                              [ 33%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_cmpr_string_char PASSED                                                                  [ 40%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[9-5] PASSED                                                                       [ 46%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] FAILED                                                                       [ 53%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-4] PASSED                                                                       [ 60%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] FAILED                                                                      [ 66%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_find_in_string PASSED                                                                    [ 73%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_is_not_in_string PASSED                                                                  [ 80%]
+    pytest_topics/test_module01.py::test_addition PASSED                                                                                                       [ 86%]
+    pytest_topics/test_module01.py::test_subtraction FAILED                                                                                                    [ 93%]
+    pytest_topics/test_module01.py::test_integer_division PASSED                                                                                               [100%]
     
     ============================================================================ FAILURES ============================================================================
     __________________________________________________________________ TestCases.test_greater[5-9] ___________________________________________________________________
@@ -182,7 +182,7 @@
     E       AssertionError: 5 is not greater than 9
     E       assert 5 > 9
     
-    pytest-topics/pytest-assertions/test_module02.py:10: AssertionError
+    pytest_topics/pytest-assertions/test_module02.py:10: AssertionError
     ___________________________________________________________________ TestCases.test_divmod[5-9] ___________________________________________________________________
     
     self = <test_module02.TestCases object at 0x1019c0810>, a = 5, b = 9
@@ -194,7 +194,7 @@
     E       assert 1 in (0, 5)
     E        +  where (0, 5) = divmod(5, 9)
     
-    pytest-topics/pytest-assertions/test_module02.py:20: AssertionError
+    pytest_topics/pytest-assertions/test_module02.py:20: AssertionError
     __________________________________________________________________ TestCases.test_divmod[10-5] ___________________________________________________________________
     
     self = <test_module02.TestCases object at 0x1019c0d10>, a = 10, b = 5
@@ -206,7 +206,7 @@
     E       assert 1 in (2, 0)
     E        +  where (2, 0) = divmod(10, 5)
     
-    pytest-topics/pytest-assertions/test_module02.py:20: AssertionError
+    pytest_topics/pytest-assertions/test_module02.py:20: AssertionError
     ________________________________________________________________________ test_subtraction ________________________________________________________________________
     
         def test_subtraction():
@@ -214,12 +214,12 @@
     E       AssertionError: Intentional failure 1
     E       assert (5 - 5) != 0
     
-    pytest-topics/test_module01.py:6: AssertionError
+    pytest_topics/test_module01.py:6: AssertionError
     ==================================================================== short test summary info =====================================================================
-    FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] - AssertionError: 5 is not greater than 9
-    FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] - AssertionError: 1 is not in divmod(5,9)
-    FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
-    FAILED pytest-topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
+    FAILED pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] - AssertionError: 5 is not greater than 9
+    FAILED pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] - AssertionError: 1 is not in divmod(5,9)
+    FAILED pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
+    FAILED pytest_topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
     ================================================================== 4 failed, 11 passed in 0.03s ==================================================================
     ```
     </details>
@@ -246,16 +246,16 @@
    $ pwd
    /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
 
-   $ pytest pytest-topics/test_module01.py -v 
+   $ pytest pytest_topics/test_module01.py -v 
    ====================================================================== test session starts =======================================================================
    platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
    cachedir: .pytest_cache
    rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
    collected 3 items                                                                                                                                                
 
-   pytest-topics/test_module01.py::test_addition PASSED                                                                                                       [ 33%]
-   pytest-topics/test_module01.py::test_subtraction FAILED                                                                                                    [ 66%]
-   pytest-topics/test_module01.py::test_integer_division PASSED                                                                                               [100%]
+   pytest_topics/test_module01.py::test_addition PASSED                                                                                                       [ 33%]
+   pytest_topics/test_module01.py::test_subtraction FAILED                                                                                                    [ 66%]
+   pytest_topics/test_module01.py::test_integer_division PASSED                                                                                               [100%]
 
    ============================================================================ FAILURES ============================================================================
    ________________________________________________________________________ test_subtraction ________________________________________________________________________
@@ -265,9 +265,9 @@
    E       AssertionError: Intentional failure 1
    E       assert (5 - 5) != 0
 
-   pytest-topics/test_module01.py:6: AssertionError
+   pytest_topics/test_module01.py:6: AssertionError
    ==================================================================== short test summary info =====================================================================
-   FAILED pytest-topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
+   FAILED pytest_topics/test_module01.py::test_subtraction - AssertionError: Intentional failure 1
    ================================================================== 1 failed, 2 passed in 0.01s ===================================================================
    ```
    </details>
@@ -284,25 +284,25 @@
   ```bash
   $ pwd
   /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
-  $  pytest pytest-topics/pytest-assertions -v                     ✔  pythonProject   at 04:09:52  
+  $  pytest pytest_topics/pytest-assertions -v                     ✔  pythonProject   at 04:09:52  
   ====================================================================== test session starts =======================================================================
   platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
   cachedir: .pytest_cache
   rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
   collected 12 items                                                                                                                                               
 
-  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[9-5] PASSED                                                                      [  8%]
-  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] FAILED                                                                      [ 16%]
-  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-4] PASSED                                                                      [ 25%]
-  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[10-5] PASSED                                                                     [ 33%]
-  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_true PASSED                                                                              [ 41%]
-  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_cmpr_string_char PASSED                                                                  [ 50%]
-  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[9-5] PASSED                                                                       [ 58%]
-  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] FAILED                                                                       [ 66%]
-  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-4] PASSED                                                                       [ 75%]
-  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] FAILED                                                                      [ 83%]
-  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_find_in_string PASSED                                                                    [ 91%]
-  pytest-topics/pytest-assertions/test_module02.py::TestCases::test_is_not_in_string PASSED                                                                  [100%]
+  pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[9-5] PASSED                                                                      [  8%]
+  pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] FAILED                                                                      [ 16%]
+  pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-4] PASSED                                                                      [ 25%]
+  pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[10-5] PASSED                                                                     [ 33%]
+  pytest_topics/pytest-assertions/test_module02.py::TestCases::test_true PASSED                                                                              [ 41%]
+  pytest_topics/pytest-assertions/test_module02.py::TestCases::test_cmpr_string_char PASSED                                                                  [ 50%]
+  pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[9-5] PASSED                                                                       [ 58%]
+  pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] FAILED                                                                       [ 66%]
+  pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-4] PASSED                                                                       [ 75%]
+  pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] FAILED                                                                      [ 83%]
+  pytest_topics/pytest-assertions/test_module02.py::TestCases::test_find_in_string PASSED                                                                    [ 91%]
+  pytest_topics/pytest-assertions/test_module02.py::TestCases::test_is_not_in_string PASSED                                                                  [100%]
 
   ============================================================================ FAILURES ============================================================================
   __________________________________________________________________ TestCases.test_greater[5-9] ___________________________________________________________________
@@ -315,7 +315,7 @@
   E       AssertionError: 5 is not greater than 9
   E       assert 5 > 9
 
-  pytest-topics/pytest-assertions/test_module02.py:10: AssertionError
+  pytest_topics/pytest-assertions/test_module02.py:10: AssertionError
   ___________________________________________________________________ TestCases.test_divmod[5-9] ___________________________________________________________________
 
   self = <test_module02.TestCases object at 0x105408650>, a = 5, b = 9
@@ -327,7 +327,7 @@
   E       assert 1 in (0, 5)
   E        +  where (0, 5) = divmod(5, 9)
 
-  pytest-topics/pytest-assertions/test_module02.py:20: AssertionError
+  pytest_topics/pytest-assertions/test_module02.py:20: AssertionError
   __________________________________________________________________ TestCases.test_divmod[10-5] ___________________________________________________________________
 
   self = <test_module02.TestCases object at 0x105408b50>, a = 10, b = 5
@@ -339,11 +339,11 @@
   E       assert 1 in (2, 0)
   E        +  where (2, 0) = divmod(10, 5)
 
-  pytest-topics/pytest-assertions/test_module02.py:20: AssertionError
+  pytest_topics/pytest-assertions/test_module02.py:20: AssertionError
   ==================================================================== short test summary info =====================================================================
-  FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] - AssertionError: 5 is not greater than 9
-  FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] - AssertionError: 1 is not in divmod(5,9)
-  FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
+  FAILED pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] - AssertionError: 5 is not greater than 9
+  FAILED pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] - AssertionError: 1 is not in divmod(5,9)
+  FAILED pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
   ================================================================== 3 failed, 9 passed in 0.02s ===================================================================
   ```
   </details>
@@ -360,25 +360,25 @@
     ```bash
     $ pwd
     /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
-    $ pytest pytest-topics/pytest-assertions/test_module02.py::TestCases -v
+    $ pytest pytest_topics/pytest-assertions/test_module02.py::TestCases -v
     ====================================================================== test session starts =======================================================================
     platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
     cachedir: .pytest_cache
     rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
     collected 12 items                                                                                                                                               
     
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[9-5] PASSED                                                                      [  8%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] FAILED                                                                      [ 16%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-4] PASSED                                                                      [ 25%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[10-5] PASSED                                                                     [ 33%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_true PASSED                                                                              [ 41%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_cmpr_string_char PASSED                                                                  [ 50%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[9-5] PASSED                                                                       [ 58%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] FAILED                                                                       [ 66%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-4] PASSED                                                                       [ 75%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] FAILED                                                                      [ 83%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_find_in_string PASSED                                                                    [ 91%]
-    pytest-topics/pytest-assertions/test_module02.py::TestCases::test_is_not_in_string PASSED                                                                  [100%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[9-5] PASSED                                                                      [  8%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] FAILED                                                                      [ 16%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-4] PASSED                                                                      [ 25%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[10-5] PASSED                                                                     [ 33%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_true PASSED                                                                              [ 41%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_cmpr_string_char PASSED                                                                  [ 50%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[9-5] PASSED                                                                       [ 58%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] FAILED                                                                       [ 66%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-4] PASSED                                                                       [ 75%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] FAILED                                                                      [ 83%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_find_in_string PASSED                                                                    [ 91%]
+    pytest_topics/pytest-assertions/test_module02.py::TestCases::test_is_not_in_string PASSED                                                                  [100%]
     
     ============================================================================ FAILURES ============================================================================
     __________________________________________________________________ TestCases.test_greater[5-9] ___________________________________________________________________
@@ -391,7 +391,7 @@
     E       AssertionError: 5 is not greater than 9
     E       assert 5 > 9
     
-    pytest-topics/pytest-assertions/test_module02.py:10: AssertionError
+    pytest_topics/pytest-assertions/test_module02.py:10: AssertionError
     ___________________________________________________________________ TestCases.test_divmod[5-9] ___________________________________________________________________
     
     self = <test_module02.TestCases object at 0x105d4ff50>, a = 5, b = 9
@@ -403,7 +403,7 @@
     E       assert 1 in (0, 5)
     E        +  where (0, 5) = divmod(5, 9)
     
-    pytest-topics/pytest-assertions/test_module02.py:20: AssertionError
+    pytest_topics/pytest-assertions/test_module02.py:20: AssertionError
     __________________________________________________________________ TestCases.test_divmod[10-5] ___________________________________________________________________
     
     self = <test_module02.TestCases object at 0x105d58490>, a = 10, b = 5
@@ -415,11 +415,11 @@
     E       assert 1 in (2, 0)
     E        +  where (2, 0) = divmod(10, 5)
     
-    pytest-topics/pytest-assertions/test_module02.py:20: AssertionError
+    pytest_topics/pytest-assertions/test_module02.py:20: AssertionError
     ==================================================================== short test summary info =====================================================================
-    FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] - AssertionError: 5 is not greater than 9
-    FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] - AssertionError: 1 is not in divmod(5,9)
-    FAILED pytest-topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
+    FAILED pytest_topics/pytest-assertions/test_module02.py::TestCases::test_greater[5-9] - AssertionError: 5 is not greater than 9
+    FAILED pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[5-9] - AssertionError: 1 is not in divmod(5,9)
+    FAILED pytest_topics/pytest-assertions/test_module02.py::TestCases::test_divmod[10-5] - AssertionError: 1 is not in divmod(10,5)
     ================================================================== 3 failed, 9 passed in 0.02s ===================================================================
     ```
     </details>
@@ -436,14 +436,14 @@
   ```bash
   $ pwd
   /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
-  $  pytest pytest-topics/test_module01.py::test_addition -v
+  $  pytest pytest_topics/test_module01.py::test_addition -v
   ====================================================================== test session starts =======================================================================
   platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
   cachedir: .pytest_cache
   rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
   collected 1 item                                                                                                                                                 
 
-  pytest-topics/test_module01.py::test_addition PASSED                                                                                                       [100%]
+  pytest_topics/test_module01.py::test_addition PASSED                                                                                                       [100%]
 
   ======================================================================= 1 passed in 0.00s ========================================================================
   ```
@@ -483,7 +483,7 @@
   Now, run the `pytest` command and inspect the output:
 
   ```bash
-  pytest -v pytest-topics/pytest-assertions/test_module03.py 
+  pytest -v pytest_topics/pytest-assertions/test_module03.py 
   =================================================================== test session starts ====================================================================
   platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
   cachedir: .pytest_cache
@@ -491,7 +491,7 @@
   plugins: django-4.5.2
   collected 1 item                                                                                                                                           
   
-  pytest-topics/pytest-assertions/test_module03.py::test_testing PASSED                                                                                [100%]
+  pytest_topics/pytest-assertions/test_module03.py::test_testing PASSED                                                                                [100%]
   
   ==================================================================== 1 passed in 0.01s =====================================================================
   ```
@@ -546,17 +546,17 @@
   Now, run the command `pytest`, and inspect the output:
 
   ```bash
-  $  pytest -v pytest-topics/pytest-assertions/test_module03.py
+  $  pytest -v pytest_topics/pytest-assertions/test_module03.py
   =================================================================== test session starts ====================================================================
   platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
   cachedir: .pytest_cache
   rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
   collected 4 items                                                                                                                                          
 
-  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_zero_divisibility PASSED                                                           [ 25%]
-  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_equation[1-2] PASSED                                                               [ 50%]
-  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_equation[2-1] PASSED                                                               [ 75%]
-  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_404 PASSED                                                                         [100%]
+  pytest_topics/pytest-assertions/test_module03.py::TestCases::test_zero_divisibility PASSED                                                           [ 25%]
+  pytest_topics/pytest-assertions/test_module03.py::TestCases::test_equation[1-2] PASSED                                                               [ 50%]
+  pytest_topics/pytest-assertions/test_module03.py::TestCases::test_equation[2-1] PASSED                                                               [ 75%]
+  pytest_topics/pytest-assertions/test_module03.py::TestCases::test_404 PASSED                                                                         [100%]
 
   ==================================================================== 4 passed in 1.35s =====================================================================
   ```
@@ -576,7 +576,7 @@
   $ pytest
   /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pycharm/_jb_pytest_runner.py --target test_module03.py::TestCases.test_tuple_cmpr 
   Testing started at 7:51 am ...
-  Launching pytest with arguments test_module03.py::TestCases::test_tuple_cmpr --no-header --no-summary -q in /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/pytest-assertions
+  Launching pytest with arguments test_module03.py::TestCases::test_tuple_cmpr --no-header --no-summary -q in /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest_topics/pytest-assertions
   
   ============================= test session starts ==============================
   collecting ... collected 1 item
@@ -650,7 +650,7 @@
   Run the command `pytest` and inspect the output:
 
   ```bash
-  $ pytest -v ./pytest-topics/pytest-assertions/test_module03.py
+  $ pytest -v ./pytest_topics/pytest-assertions/test_module03.py
   =================================================================== test session starts ====================================================================
   platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
   cachedir: .pytest_cache
@@ -658,12 +658,12 @@
   plugins: django-4.5.2
   collected 6 items                                                                                                                                          
   
-  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_zero_divisibility PASSED                                                           [ 16%]
-  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_equation[1-2] PASSED                                                               [ 33%]
-  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_equation[2-1] PASSED                                                               [ 50%]
-  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_404 PASSED                                                                         [ 66%]
-  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_error_assert PASSED                                                                [ 83%]
-  pytest-topics/pytest-assertions/test_module03.py::TestCases::test_tuple_cmpr PASSED                                                                  [100%]
+  pytest_topics/pytest-assertions/test_module03.py::TestCases::test_zero_divisibility PASSED                                                           [ 16%]
+  pytest_topics/pytest-assertions/test_module03.py::TestCases::test_equation[1-2] PASSED                                                               [ 33%]
+  pytest_topics/pytest-assertions/test_module03.py::TestCases::test_equation[2-1] PASSED                                                               [ 50%]
+  pytest_topics/pytest-assertions/test_module03.py::TestCases::test_404 PASSED                                                                         [ 66%]
+  pytest_topics/pytest-assertions/test_module03.py::TestCases::test_error_assert PASSED                                                                [ 83%]
+  pytest_topics/pytest-assertions/test_module03.py::TestCases::test_tuple_cmpr PASSED                                                                  [100%]
   
   ==================================================================== 6 passed in 1.34s =====================================================================
   ```
