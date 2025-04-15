@@ -175,6 +175,7 @@
 	norecursedirs = .* venv
 	```
  
+<center>
 <table>
 	<tr>
 		<th>Format</th>
@@ -212,6 +213,7 @@
 		<td>Not pytest specific</td>
 	</tr>
 </table>
+</center>
 
 - It is mostly recommended to use `pytest.ini` file, for configuring the pytests. If you want to go through the 
   details of some of the options available for `pytest.ini`, we recommend you to go to the documentation page to 
