@@ -218,3 +218,15 @@
 - It is mostly recommended to use `pytest.ini` file, for configuring the pytests. If you want to go through the 
   details of some of the options available for `pytest.ini`, we recommend you to go to the documentation page to 
   explore more on that.
+
+## Dataprovider (Data Driven Tests)
+
+- In this section, we will see how we can pass in data from our file, and use the data to run our test.
+- In a real environment, in an actual automation framework, we need to read data  or input values from file and 
+  actually work on top of that.
+- We can do the same in `pytest` using `@pytest.mark.paramaterize()` to pass data after reading from the file.
+  - Let's start by creating a python package named `utils`.
+
+    ![](./pytest_automation)
+
+  
