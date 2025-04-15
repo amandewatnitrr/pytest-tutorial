@@ -1398,8 +1398,8 @@
 > [!IMPORTANT]
 > The Scope Hierarchy is as follows: <br/>
 > `session > package > module > class > function` <br/>
-> Higher scoped fixtures are instantiated first.
-> Fixtures can depend on higher or same scopes but not lower.
+> - Higher scoped fixtures are instantiated first. 
+> - Fixtures can depend on higher or same scopes but not lower.
 
 > [!TIP]
 > Use `narrowest scope` possible for test isolation.
