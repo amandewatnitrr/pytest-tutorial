@@ -428,6 +428,137 @@
 	============================================================================= 1 passed in 0.01s ==============================================================================
 	```
 
+- Now, we know how to write a `configparser` and read a config file using it, and use it properly in the test.
+- In the current way of writing the `configparser`, we cannot control which config file to read. We want to be more 
+  dynamic, and read config files based on the environment we are testing, but we don't want to hardcode the config 
+  file name in our `configparser`. We don't want to hardcode the config file path here, but we want to be able to 
+  pass in the config file name from where we are calling our test.
+- For example, let's say we want to test in production, and now we would need to go into the code and change it 
+  which is really a very tedious task to do again and again.
+- So, we will need to use the Object Oriented way of writing the `ocnfigparser` in classes and object, which will 
+  really help in controlling what we pass into the `configparser`, based on which we can control our testing 
+  environment.
+- Let's write another `configparser`:
 
+	`configParserOOP.py`
 
+	```python
+	import configparser
+	from pathlib import Path
+	
+	from setuptools.command.setopt import config_file
+	
+	
+	class ConfigParser():
+	
+	    cfgFile = 'qa.ini' # default config file
+	    cfgFileDirectory = 'config' # config directory
+	
+	    config = configparser.ConfigParser()
+	
+	    # Next, we will start by creating a constructor for the clas
+	    def __init__(self, cfg=cfgFile):
+	        self.cfgFile = cfg
+	        self.BASE_DIR = Path(__file__).resolve().parent.parent
+	        self.CONFIG_FILE = self.BASE_DIR.joinpath(self.cfgFileDirectory).joinpath(self.cfgFile)
+	        self.config.read(self.CONFIG_FILE)
+	
+	    def getGmailUrl(self):
+	        return self.config['gmail']['url']
+	
+	
+	    def getGmailUsr(self):
+	        return self.config['gmail']['user']
+	
+	
+	    def getGmailPass(self):
+	        return self.config['gmail']['pass']
+	
+	
+	    def getOutlookUrl(self):
+	        return self.config['outlook']['url']
+	
+	
+	    def getOutlookUsr(self):
+	        return self.config['outlook']['user']
+	
+	
+	    def getOutlookPass():
+	        return config['outlook']['pass']
+	```
+ 
+- Created another `ini` file for prod configurations.
+
+	`prod.ini`
+	
+	```ini
+	[gmail]
+	url = qa_prod.gmail.com
+	user = gamil_prod_user1
+	pass = gamil_prod_pass1
+	
+	[outlook]
+	url = qa_prod.outlook.com
+	user = outlook_prod_user1
+	pass = outlook_prod_pass1
+	```
+
+- Create the test file for testing the access to the config file as per the arguments passed to the `configparser`.
+
+	`test_getConfigData.py`
+	
+	```python
+	import pytest
+	from pytest_topics.utils.configParserOOP import ConfigParser
+	
+	config  = ConfigParser('prod.ini')
+	class TestCases():
+	
+	    def test_getGmailUrl_qa(self):
+	        assert config.getGmailUrl() == 'qa.gmail.com'
+	
+	    def test_getGmailUrl_prod(self):
+	        assert config.getGmailUrl() == 'qa_prod.gmail.com'
+	
+	
+	
+	
+	if __name__ == '__main__':
+	    test = TestCases()
+	```
   
+- Now, execute this and you will see the following output:
+
+	```bash
+	$ pytest -v -s test_getConfigData.py                                                1 ✘  at 01:20:40  
+	============================================================================ test session starts =============================================================================
+	platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+	cachedir: .pytest_cache
+	rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+	configfile: pytest.ini
+	plugins: django-4.5.2
+	collected 2 items                                                                                                                                                            
+	
+	test_getConfigData.py::TestCases::test_getGmailUrl_qa FAILED
+	test_getConfigData.py::TestCases::test_getGmailUrl_prod PASSED
+	
+	================================================================================== FAILURES ==================================================================================
+	_______________________________________________________________________ TestCases.test_getGmailUrl_qa ________________________________________________________________________
+	
+	self = <pytest_topics.test_getConfigData.TestCases object at 0x104973b10>
+	
+	    def test_getGmailUrl_qa(self):
+	>       assert config.getGmailUrl() == 'qa.gmail.com'
+	E       AssertionError: assert 'qa_prod.gmail.com' == 'qa.gmail.com'
+	E         - qa.gmail.com
+	E         + qa_prod.gmail.com
+	E         ?   +++++
+	
+	test_getConfigData.py:8: AssertionError
+	========================================================================== short test summary info ===========================================================================
+	FAILED test_getConfigData.py::TestCases::test_getGmailUrl_qa - AssertionError: assert 'qa_prod.gmail.com' == 'qa.gmail.com'
+	======================================================================== 1 failed, 1 passed in 0.14s =========================================================================
+	```
+ 
+- Cause in the testcase we have clearly mentioned, that the testing should cove the `prod.ini` configurations, which 
+  overwrites the default reading of `qa.ini` file.

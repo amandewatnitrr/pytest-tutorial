@@ -1,14 +1,15 @@
 import pytest
-from pytest_topics.utils.myconfigparser import *
+from pytest_topics.utils.configParserOOP import ConfigParser
 
-class TestCases:
+config  = ConfigParser('prod.ini')
+class TestCases():
 
-    def test_getGmailUrl(self):
-        try:
-            print(f"Gmail URL: {getGmailUrl()}")
-            assert getGmailUrl() == 'qa.gmail.com'
-        except Exception as e:
-            print(f"Unknown Error Occured: {e}.")
+    def test_getGmailUrl_qa(self):
+        assert config.getGmailUrl() == 'qa.gmail.com'
+
+    def test_getGmailUrl_prod(self):
+        assert config.getGmailUrl() == 'qa_prod.gmail.com'
+
 
 
 
