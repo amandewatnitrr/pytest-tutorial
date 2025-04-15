@@ -52,3 +52,24 @@ def return_tuple_or_list():
 @pytest.fixture(params=[(1,2),[3,4]], ids=['tuple', 'list'])
 def return_tuple_list(request):
     return request.param
+
+#####################
+# LESSON 5 FIXTURES #
+#####################
+
+qa_prop = 'qa.prop'
+prod_prop = 'prod.prop'
+
+def pytest_addoption(parser):
+    parser.addoption("--cmdopt",default='qa')
+
+@pytest.fixture()
+def cmdOpt(pytestconfig):
+    opt = pytestconfig.getoption("cmdopt")
+    if opt == 'qa':
+        f = open("qa.prop",'r+')
+    elif opt == 'prod':
+        f = open("prod.prop",'r+')
+    else:
+        f = open("unknown.prop",'r+')
+    yield f
