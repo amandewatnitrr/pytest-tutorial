@@ -291,7 +291,7 @@
 - Once you execute, you get the following output:
 
 	```bash
-	 pytest -v -s test_dataProvider.py                                                 ✔  at 21:52:00  
+	$ pytest -v -s test_dataProvider.py                                                 ✔  at 21:52:00  
 	============================================================================ test session starts =============================================================================
 	platform darwin -- Python 3.11.3, pytest-7.4.2, pluggy-1.3.0 -- /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11
 	cachedir: .pytest_cache
