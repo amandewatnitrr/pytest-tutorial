@@ -9,7 +9,7 @@
 
   <details>
   
-  <summary>`test_paramaterize.py`</summary>
+  <summary> <b>test_paramaterize.py</b> </summary>
   
     ```python
     import pytest	
