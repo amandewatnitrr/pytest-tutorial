@@ -33,6 +33,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
     ```bash
 	 $ pytest -v test_paramaterize.py                                                   1 ✘  at 20:58:38  
 	============================================================================ test session starts ============================================================================
@@ -195,6 +196,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python -X pycache_prefix=/Users/akd/Library/Caches/JetBrains/PyCharmCE2024.2/cpython-cache /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pydev/pydevd.py --multiprocess --qt-support=auto --client 127.0.0.1 --port 49537 --file /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pycharm/_jb_pytest_runner.py --path /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_fixtures.py 
   Testing started at 12:05 pm ...
@@ -260,6 +262,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python -X pycache_prefix=/Users/akd/Library/Caches/JetBrains/PyCharmCE2024.2/cpython-cache /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pydev/pydevd.py --multiprocess --qt-support=auto --client 127.0.0.1 --port 49662 --file /Users/akd/Applications/PyCharm Community Edition.app/Contents/plugins/python-ce/helpers/pycharm/_jb_pytest_runner.py --path /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/pytest-topics/test_fixtures.py 
   Testing started at 1:13 pm ...
@@ -339,6 +342,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   $ pytest -v -s test_fixtures.py                                        4 ✘  pythonProject   at 13:34:15  
   ============================================================================ test session starts ============================================================================
@@ -417,6 +421,7 @@
   
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   Fixture under execution.
   XFAILthe
@@ -517,6 +522,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   $ pytest -v -s test_fixtures.py                                          ✔  pythonProject   at 16:36:14  
   ============================================================================ test session starts ============================================================================
@@ -633,6 +639,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   $ pytest -v -s test_fixtures.py                                      127 ✘  pythonProject   at 16:52:33  
   ============================================================================ test session starts ============================================================================
@@ -775,6 +782,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   $  pytest -v -s test_fixtures.py                                                             ✔  at 18:13:44  
   ============================================================================ test session starts =============================================================================
@@ -945,6 +953,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   $ pytest -v -s test_fixtures.py                                                  ✔  at 21:29:47  
   ========================================================================== test session starts ==========================================================================
@@ -995,6 +1004,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   $ pytest -v -s test_fixtures.py --setup-show                                              ✔  at 22:05:05  
   ========================================================================== test session starts ==========================================================================
@@ -1074,6 +1084,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   $  pytest -v -s test_introspect.py                                          ✔  at 22:50:05  
   ========================================================================== test session starts ==========================================================================
@@ -1140,6 +1151,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   $ pytest -v -s test_introspect.py                                          ✔  at 22:54:57  
   ========================================================================== test session starts ==========================================================================
@@ -1256,6 +1268,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   $ pytest -v -s test_introspect.py                                              1 ✘  at 23:32:33  
   ========================================================================== test session starts ==========================================================================
@@ -1378,6 +1391,7 @@
 
   <details>
   <summary><b>Output</b></summary>
+  
   ```bash
   pytest -v -s test_introspect.py                                             ✔  at 23:52:56  
   ========================================================================== test session starts ==========================================================================
