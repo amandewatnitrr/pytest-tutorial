@@ -1362,3 +1362,48 @@
   
   =========================================================================== 4 passed in 0.01s ===========================================================================
   ```
+  
+### Fixture Scope
+
+- Fixture scope determines how often a fixture is initialized and torn down during a test run. Pytest supports 5 scopes, listed from shortest to longest lifetime:
+
+  - function(default)
+  - class
+  - module
+  - package
+  - session
+
+#### Function Scope 
+
+- This is the default scope. The fixture is invoked once per test function.
+- It is initialized orr setup before each test function and teardown after the function execution is completed.
+- It is used in situations where we need fresh data/state for eevery test.
+
+#### Class Scope
+
+- It initializes once per test class, and teardown happens once all the tests in the class have completed there execution.
+- It is used in scenarios where we need shared setup for all methods in a class.
+
+#### Module Scope
+
+- It is initialized once per module, and will teardown only after all the tests in the module have finished there execution.
+- It is used in scenarios where initializtion is resource expensive, for example setting up a Database Connection.
+
+#### Session Scope
+
+- Scope  wise this is this has the longest lifeline among all the scopes.
+- This is initialized once per test session, and will teardown once all the tests that are supposed to be executed during the session have finished there execution.
+- This is used in scenarios where we have Global Configurations that we need to test or cross-test dependencies.
+
+> [!IMPORTANT]
+> The Scope Hierarchy is as follows:
+> `session > package > module > class > function`
+> Higher scoped fixtures are instantiated first.
+> Fixtures can depend on higher or same scopes but not lower.
+
+> [!TIP]
+> Use `narrowest scope` possible for test isolation.
+> Use `broader scope` for:
+>   - Expensive Resources (example: Database, APIs)
+>   - Read-only Configurations
+> Avoid `mutable state` in broader scopes.
