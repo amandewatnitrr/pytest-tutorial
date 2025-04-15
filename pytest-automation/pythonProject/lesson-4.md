@@ -7,7 +7,9 @@
 
 - Let's try to understand this through an example:
 
-  `test_paramaterize.py`
+  <details>
+  
+  <summary>`test_paramaterize.py`</summary>
   
     ```python
     import pytest	
@@ -28,6 +30,7 @@
 	    test = TestCase()
 	    test.run_tests()
    ```
+  </details>
   
 - Once you execute the test cases you see something like this:
 
