@@ -12,11 +12,12 @@ FEATURE_FILE = BASE_DIR.joinpath(featureFileDir).joinpath(featureFile)
 def pytest_configure():
     pytest.AMT = 0
 
+scenarios(FEATURE_FILE)
 
-@scenario(FEATURE_FILE, 'Withdrawal of Money')
-def test_withdrawal():
-    print(f"Test: Withdrawal of Money - Completed")
-    pass
+# @scenario(FEATURE_FILE, 'Withdrawal of Money')
+# def test_withdrawal():
+#     print(f"Test: Withdrawal of Money - Completed")
+#     pass
 
 
 @given('The account balance is 100')
@@ -36,10 +37,10 @@ def check_balance():
     print(f"\nRemaining Amount = {pytest.AMT}")
     assert pytest.AMT == 70
 
-@scenario(FEATURE_FILE,"Removal of items from set")
-def test_itemRemovalFromSet():
-    print("Test: Removal of Item from Test - Completed")
-    pass
+# @scenario(FEATURE_FILE,"Removal of items from set")
+# def test_itemRemovalFromSet():
+#     print("Test: Removal of Item from Test - Completed")
+#     pass
 
 @given("A set of 3 fruits",target_fixture="fruits")
 def setOfFruits():

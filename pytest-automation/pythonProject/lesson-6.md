@@ -1,3 +1,5 @@
+from pytest_bdd import scenarios
+
 # Pytest - BDD: Behaviour Driven Development
 
 - Let's first start by understanding what BDD is.
@@ -298,3 +300,220 @@
   ==================================================================== 2 passed in 0.01s ====================================================================
   ```
   
+## `scenarios` vs `scenario` decorator
+
+- So, far we have used the `scenario` decorator, where we have to write for each `scenario` individually. But, we 
+  can also do it another way where we define the whole feature file. Instead of needing to write a seprate scenario 
+  for each of the test, we can just define the scenario file, and it will collect everything from that whole file, 
+  and it will run.
+
+- For that we can use the `scenarios` decorator. We can use this in following way:
+
+  ```python
+  scenarios(FEATURE_FILE)
+  ```
+  
+- Here, we are not pointing to each scenario individually, but rather at the whole feature file itself. Or, we can 
+  also point to the folder that will also work because the linking which is happening test module and the test 
+  function and, the test scenario is covered by `given`, `when` and `then` step-definitions.
+
+> [!TIP]
+> The best practice is to specify feature file, instead of folder name.
+
+- So, let's suppose we comment out our scenario test functions from the bdd test python file, and let's try 
+  executing it.
+
+  `test_bdd_1.py`
+  
+  ```python
+  from pytest_bdd import scenario, scenarios, given, when, then
+  from pathlib import Path
+  import pytest
+  
+  
+  featureFileDir = 'feature_dir'
+  featureFile = 'test_1.feature'
+  
+  BASE_DIR = Path(__file__).resolve().parent
+  FEATURE_FILE = BASE_DIR.joinpath(featureFileDir).joinpath(featureFile)
+  
+  def pytest_configure():
+      pytest.AMT = 0
+  
+  scenarios(FEATURE_FILE)
+  
+  # @scenario(FEATURE_FILE, 'Withdrawal of Money')
+  # def test_withdrawal():
+  #     print(f"Test: Withdrawal of Money - Completed")
+  #     pass
+  
+  
+  @given('The account balance is 100')
+  def starting_balance():
+      pytest.AMT = 100
+      print(f"\nStarting account balance {pytest.AMT}")
+  
+  
+  @when('The account holder withdraws 30')
+  def withdrawal_request():
+      pytest.AMT -= 30
+      print("\nAmount deducted = 30")
+  
+  
+  @then('The account balance remaining should be 70')
+  def check_balance():
+      print(f"\nRemaining Amount = {pytest.AMT}")
+      assert pytest.AMT == 70
+  
+  # @scenario(FEATURE_FILE,"Removal of items from set")
+  # def test_itemRemovalFromSet():
+  #     print("Test: Removal of Item from Test - Completed")
+  #     pass
+  
+  @given("A set of 3 fruits",target_fixture="fruits")
+  def setOfFruits():
+      fruits = {"apple", "mango", "banana"}
+      print(f"\nFruits in set: {fruits}")
+      return fruits
+  
+  # To use the paramater fruits, we need to define special parameter called `target_fixture`.
+  
+  @when("We remove a fruit from the set")
+  def removeFruits(fruits):
+      print(f"\nFruit removed: {fruits.pop()}")
+      print(f"\nRemaining Fruits: {fruits}")
+  
+  @then("The set will have 2 fruits")
+  def remainderFruits(fruits):
+      try:
+          assert len(fruits) == 2
+          print("\nThere are now 2 fruits in set.")
+      except Exception as e:
+          print(f"\nUnknown error occurred: {e}")
+  
+  ```
+
+  ```bash
+  $ pytest -v -s test_bdd_1.py                                                 ✔  pythonProject   at 17:33:24  
+  ============================================================================ test session starts =============================================================================
+  platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: bdd-8.1.0
+  collected 2 items                                                                                                                                                            
+  
+  test_bdd_1.py::test_withdrawal_of_money 
+  Starting account balance 100
+  
+  Amount deducted = 30
+  
+  Remaining Amount = 70
+  PASSED
+  test_bdd_1.py::test_removal_of_items_from_set 
+  Fruits in set: {'apple', 'mango', 'banana'}
+  
+  Fruit removed: apple
+  
+  Remaining Fruits: {'mango', 'banana'}
+  
+  There are now 2 fruits in set.
+  PASSED
+  
+  ============================================================================= 2 passed in 0.01s ==============================================================================
+  ```
+  
+- So, the tests are still being covered. As we can see here: `test_withdrawal_of_money`, 
+  `test_removal_of_items_from_set` it's generating using the `Scenario` in the feature file, and identifying for us 
+  which specific BDD Test Cases have been successfully covered.
+
+## Pytest BDD & Fixtures
+
+- A important note to consider while going through section is, nothing changes for the fixtures and, everything 
+  remains same.
+- Let's understand this using an example. In this example, we will take a set of strings. The test will be to check 
+  the length of the updated set, if it matches the expected length or not.
+
+  `test_fixture.feature`
+  
+  ```feature
+  Feature: Fixture and BDD Background on python set datatype
+  
+    Scenario: Adding elements to a set
+      Given Set has 3 elements
+      When We add 2 elements to the set
+      Then Set now has 5 elements
+  ```
+
+  `test_baddFixtures.py`
+  
+  ```python
+  from pytest_bdd import scenario, scenarios, when, then, given
+  from pathlib import Path
+  import pytest
+  
+  featureFileDir = 'feature_dir'
+  featureFile = 'test_fixture.feature'
+  
+  BASE_DIR = Path(__file__).resolve().parent
+  FEATURE_FILE=BASE_DIR.joinpath(featureFileDir).joinpath(featureFile)
+  
+  scenarios(FEATURE_FILE)
+  
+  @pytest.fixture()
+  def setup_set():
+      countries = {"India", "China", "US"}
+      print(f"Forming Set: {countries}")
+      return countries
+  
+  @given("Set has 3 elements",target_fixture="setup_set")
+  def setOfEle(setup_set):
+      if len(setup_set) == 0:
+          pytest.xfail("Set is empty.")
+      elif len(setup_set) > 3:
+          while len(setup_set) > 3:
+              setup_set.pop()
+      return setup_set
+  
+  @when("We add 2 elements to the set")
+  def addEleToSet(setup_set):
+      setup_set.add("UK")
+      setup_set.add("Russia")
+      print("\nAdded 2 elements to the set")
+  
+  @then("Set now has 5 elements")
+  def checkSet(setup_set):
+      print(f"\nSet has {len(setup_set)} elements.")
+      assert len(setup_set) == 5
+      print("\nSet Length check test completed.")
+  ```
+  
+- Here, you can see that how we have defined a fixture `setup_set`. For the `given` decorator, we use it to 
+  initialize the set, making sure, the set is of the proper size as expected. We use the `target_fixture` parameter 
+  of the `given` decorator to share the variable value with `when` and `than` decorators. Following that we modify 
+  the set, and check if the length is same as the expected length.
+
+  If you run the test, you will see the following output:
+
+  ```bash
+  $ pytest -v -s test_bddFixtures.py        ✔  pythonProject   at 17:35:21  
+  =========================================================== test session starts ===========================================================
+  platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: bdd-8.1.0
+  collected 1 item                                                                                                                          
+  
+  test_bddFixtures.py::test_adding_elements_to_a_set Forming Set: {'US', 'India', 'China'}
+  
+  Added 2 elements to the set
+  
+  Set has 5 elements.
+  
+  Set Length check test completed.
+  PASSED
+  
+  ============================================================ 1 passed in 0.01s ============================================================
+  ```
+
