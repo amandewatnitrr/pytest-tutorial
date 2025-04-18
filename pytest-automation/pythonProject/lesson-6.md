@@ -517,3 +517,139 @@ from pytest_bdd import scenarios
   ============================================================ 1 passed in 0.01s ============================================================
   ```
 
+## Pytest-BDD: About Background
+
+- Occasionally, we'll find ourselves repeating the same `Given` steps in all of the scenarios in a `Feature`. Since, 
+  it might be repeated in every scenario, this is an indication that those steps are not essential to describe the 
+  scenarios; they are incidental details. We can move such `Given` steps to the background, by grouping them under a 
+  `Background` section.
+
+- All the steps from background will be executed before all the scenario's own givens steps. This provides us with a 
+  facility of preparing common setups for multiple scenarios using in a single section.
+
+> [!NOTE]
+> There is only `Given` step-definition that should be used in `Background` section, step-definitions `When` and 
+> `Then` are prohibited because their purpose are related to actions and consuming outcomes, that is conflict with 
+> `Background` aim - prepare system for tests or "put the system in a known state" as `Given` does it. The statement 
+> above is applied for strict Gherkin mode, which is enabled by default.
+
+- Let's try to understand this through an example:
+
+  `test_fixture.feature`
+  
+  ```feature
+  Feature: Fixture and BDD Background on python set datatype
+  
+    Background: Setting up data for test
+      Given A datatype set
+      And The Set is not empty
+  
+  
+    Scenario: Adding elements to a set
+      Given Set has 3 elements
+      When We add 2 elements to the set
+      Then Set now has 5 elements
+  ```
+
+  `test_bddFixtures.py`
+
+  ```python
+  from pytest_bdd import scenario, scenarios, when, then, given
+  from pathlib import Path
+  import pytest
+  
+  featureFileDir = 'feature_dir'
+  featureFile = 'test_fixture.feature'
+  
+  BASE_DIR = Path(__file__).resolve().parent
+  FEATURE_FILE=BASE_DIR.joinpath(featureFileDir).joinpath(featureFile)
+  
+  scenarios(FEATURE_FILE)
+  
+  @pytest.fixture()
+  def setup_set():
+      countries = {"India", "China", "US", "Germany"}
+      print(f"Forming Set: {countries}")
+      return countries
+  
+  @given("A datatype set")
+  def checkSetType(setup_set):
+      print("\nChecking Set Type in background...")
+      if not isinstance(setup_set,set):
+          pytest.xfail("\nDatatype is not set.")
+      else:
+          print("\nDatatype is set.")
+  
+  @given("The Set is not empty")
+  def setNotEmpty(setup_set):
+      print("\nChecking set length in background...")
+      if(len(setup_set)) <= 0:
+          pytest.xfail("\nFailure expected. Set is empty or smaller than expected.")
+      elif len(setup_set) == 3 :
+          print("\nSet is of desired size.")
+      else:
+          print("\nSet is bigger than expected. pop() needed.")
+  
+  
+  @given("Set has 3 elements",target_fixture="setup_set")
+  def setOfEle(setup_set):
+      if len(setup_set) == 0:
+          pytest.xfail("Set is empty.")
+      elif len(setup_set) > 3:
+          while len(setup_set) > 3:
+              setup_set.pop()
+      return setup_set
+  
+  @when("We add 2 elements to the set")
+  def addEleToSet(setup_set):
+      setup_set.add("UK")
+      setup_set.add("Russia")
+      print("\nAdded 2 elements to the set")
+  
+  @then("Set now has 5 elements")
+  def checkSet(setup_set):
+      print(f"\nSet has {len(setup_set)} elements.")
+      assert len(setup_set) == 5
+      print("\nSet Length check test completed.")
+  ```
+  
+- In the feature file as you can see, we have `Background` section covering the setup for us, checking if the data 
+  is of required type, and does have a desired legnth, using the `2` given statements. So, the order of execution 
+  now becomes:
+
+  ```plainText
+  Given(Scenario) -> Background -> When(scenario) -> Then(scenario)
+  ```
+  
+- Once executed, you will see the following output for the pytest:
+
+  ```bash
+  $ pytest -v -s test_bddFixtures.py  ✔  pythonProject   at 20:12:23  
+  =========================================================== test session starts ===========================================================
+  platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: bdd-8.1.0
+  collected 1 item                                                                                                                          
+  
+  test_bddFixtures.py::test_adding_elements_to_a_set Forming Set: {'US', 'Germany', 'China', 'India'}
+  
+  Checking Set Type in background...
+  
+  Datatype is set.
+  
+  Checking set length in background...
+  
+  Set is bigger than expected. pop() needed.
+  
+  Added 2 elements to the set
+  
+  Set has 5 elements.
+  
+  Set Length check test completed.
+  PASSED
+  
+  ============================================================ 1 passed in 0.01s ============================================================
+  ```
+

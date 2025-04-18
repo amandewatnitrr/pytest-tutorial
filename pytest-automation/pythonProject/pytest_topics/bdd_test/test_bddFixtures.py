@@ -12,9 +12,28 @@ scenarios(FEATURE_FILE)
 
 @pytest.fixture()
 def setup_set():
-    countries = {"India", "China", "US"}
+    countries = {"India", "China", "US", "Germany"}
     print(f"Forming Set: {countries}")
     return countries
+
+@given("A datatype set")
+def checkSetType(setup_set):
+    print("\nChecking Set Type in background...")
+    if not isinstance(setup_set,set):
+        pytest.xfail("\nDatatype is not set.")
+    else:
+        print("\nDatatype is set.")
+
+@given("The Set is not empty")
+def setNotEmpty(setup_set):
+    print("\nChecking set length in background...")
+    if(len(setup_set)) <= 0:
+        pytest.xfail("\nFailure expected. Set is empty or smaller than expected.")
+    elif len(setup_set) == 3 :
+        print("\nSet is of desired size.")
+    else:
+        print("\nSet is bigger than expected. pop() needed.")
+
 
 @given("Set has 3 elements",target_fixture="setup_set")
 def setOfEle(setup_set):
