@@ -653,3 +653,93 @@ from pytest_bdd import scenarios
   ============================================================ 1 passed in 0.01s ============================================================
   ```
 
+## Paramaterizing in Pytest BDD
+
+- Let's try to understand this through an example directly.
+
+  `test_paramaterzie.feature`
+  
+  ```feature
+  Feature: Paramaterizing tests in Pytest BDD
+  
+    Scenario: Check varities of fruit
+      Given There are 3 varieties of fruit
+      When We add a same variety of fruit
+      Then There is same count of varieties
+      But If we add a different variety of fruit
+      Then The count of varieties increases to 4
+  ```
+  
+  `test_bddParamaterize.py`
+  
+  ```python
+  from pytest_bdd import scenario, scenarios, when, then, given, parsers
+  from pathlib import Path
+  import pytest
+  
+  featureFileDir = 'feature_dir'
+  featureFile = 'test_paramaterzie.feature'
+  
+  BASE_DIR = Path(__file__).resolve().parent
+  FEATURE_FILE=BASE_DIR.joinpath(featureFileDir).joinpath(featureFile)
+  
+  scenarios(FEATURE_FILE)
+  
+  @given("There are 3 varieties of fruit",target_fixture="fruits")
+  def exsistingFruits():
+      fruits = {'apple', 'grapes', 'strawberry'}
+      print(f"Fruits: {fruits}. There are total of {len(fruits)}")
+      return fruits
+  
+  @when("We add a same variety of fruit")
+  def addSameFruit(fruits):
+      print("\nAdding a fruit that is already there in the set.")
+      fruits.add("grapes")
+  
+  @then("There is same count of varieties")
+  def same_count(fruits):
+      print(f"There are still {len(fruits)} fruit varieties.")
+      assert len(fruits) == 3
+  
+  
+  @then("If we add a different variety of fruit")
+  def addDiffFruit(fruits):
+      print("\nTomato added to fruits")
+      fruits.add("Tomato")
+  
+  @then(parsers.parse("The count of varieties increases to {count:d}"))
+  def updated_count(fruits,count):
+      print(f"\nThere are {count} varieties of fruits.")
+      assert len(fruits) == count
+  
+  ```
+  
+- Here, you can see that for paramaterizing we have used, `parser.parse()` in the `then` decorator, wherein we have 
+  mentioned the count of varieties of fruits as `{count:d}`, where `d` is the datatype for `digits`. And, contains 
+  the value picked from the feature file.
+
+- When you run this test, you get this kind of output.
+
+  ```bash
+  $ pytest -v -s test_bddParamaterize.py 
+  ====================================================== test session starts ======================================================
+  platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: bdd-8.1.0
+  collected 1 item                                                                                                                
+  
+  test_bddParamaterize.py::test_check_varities_of_fruit Fruits: {'apple', 'grapes', 'strawberry'}. There are total of 3
+  
+  Adding a fruit that is already there in the set.
+  There are still 3 fruit varieties.
+  
+  Tomato added to fruits
+  
+  There are 4 varieties of fruits.
+  PASSED
+  
+  ======================================================= 1 passed in 0.01s =======================================================
+  ```
+  
