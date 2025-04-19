@@ -862,3 +862,118 @@ from pytest_bdd import scenarios
   
   ======================================================================= 2 passed in 0.01s =======================================================================
   ```
+
+## Pytest-BDD: Scenario Outline
+
+- The `Scenario Outline` keyword can be used to run the same scenario multiple times, with different combination of 
+  values. The keyword `Scenario Template` is a synonym of the keyword `Scenario Outline`.
+- Copying and Pasting scenarios to use different values quickly becomes tedious and repetitive.
+
+  `exmaple.feature`
+  
+  ```feature
+    Scenario: Paramaterize benefits
+      Given We have 5 fruits
+      When I eat 3 fruits
+      And I eat 2 fruits
+      Then I should have 0 fruits
+      
+    Scenario: Paramaterize benefits
+      Given We have 4 fruits
+      When I eat 2 fruits
+      And I eat 2 fruits
+      Then I should have 0 fruits
+  ```
+  
+- We can collapse the 2 similar scenarios into a `Scenario Outline`. We can do it in this fashion.
+
+  `scenarioOutline.feature`
+  
+  ```feature
+  Feature: Fruit Consumption Parameterization
+  
+    Scenario Outline: Eating multiple fruits in sequence
+      Given We have <initial> fruits
+      When I eat <eat1> fruits
+      And I eat <eat2> fruits
+      Then I should have <remaining> fruits
+  
+      Examples:
+        | initial | eat1 | eat2 | remaining |
+        | 5       | 3    | 2    | 0         |
+        | 4       | 2    | 2    | 0         |
+        | 10      | 4    | 3    | 3         |
+  ```
+  
+- Now, we can use the same code that we wrote previously now:
+
+  `test_scenarioOutline.py`
+  
+  ```python
+  from pytest_bdd import scenario, scenarios, when, then, given, parsers
+  from pathlib import Path
+  import pytest
+  from pytest_bdd.generation import print_missing_code
+  
+  featureFileDir = 'feature_dir'
+  featureFile = 'scenarioOutline.feature'
+  
+  BASE_DIR = Path(__file__).resolve().parent
+  FEATURE_FILE=BASE_DIR.joinpath(featureFileDir).joinpath(featureFile)
+  
+  scenarios(FEATURE_FILE)
+  
+  @given(parsers.parse("We have {count:d} fruits"),target_fixture="start_fruits")
+  def exsistingFruits(count):
+      return dict(start=count,eat = 0)
+  
+  @when(parsers.parse("I eat {eat:d} fruits"))
+  def eat3ruits(start_fruits,eat):
+      print(f"\nWe have eaten {eat} fruits.")
+      start_fruits["eat"] += eat
+  
+  @then(parsers.parse("I should have {left:d} fruits"))
+  def shouldHaveFruits(start_fruits,left):
+      diff = start_fruits["start"] - start_fruits["eat"]
+      print(f"\nWe have {diff} fruits remaining.")
+      assert start_fruits["start"] - start_fruits["eat"] == left
+  
+  ```
+  
+- When you execute this, you get the follwing output, and you can see the BDD Test Cases being executed for multiple 
+  inputs.
+
+  ```bash
+  $  pytest -v -s test_scenarioOutline.py                          ✔  pythonProject   at 15:51:19  
+  ====================================================================== test session starts ======================================================================
+  platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: bdd-8.1.0
+  collected 3 items                                                                                                                                               
+  
+  test_scenarioOutline.py::test_eating_multiple_fruits_in_sequence[5-3-2-0] 
+  We have eaten 3 fruits.
+  
+  We have eaten 2 fruits.
+  
+  We have 0 fruits remaining.
+  PASSED
+  test_scenarioOutline.py::test_eating_multiple_fruits_in_sequence[4-2-2-0] 
+  We have eaten 2 fruits.
+  
+  We have eaten 2 fruits.
+  
+  We have 0 fruits remaining.
+  PASSED
+  test_scenarioOutline.py::test_eating_multiple_fruits_in_sequence[10-4-3-3] 
+  We have eaten 4 fruits.
+  
+  We have eaten 3 fruits.
+  
+  We have 3 fruits remaining.
+  PASSED
+  
+  ======================================================================= 3 passed in 0.01s =======================================================================
+  ```
