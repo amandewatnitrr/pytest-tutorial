@@ -743,3 +743,122 @@ from pytest_bdd import scenarios
   ======================================================= 1 passed in 0.01s =======================================================
   ```
   
+- Let's try to explore some more examples to understand benefits of Paramaterizing in BDD Tests.
+
+  `test_paramaterzie.feature`
+  
+  ```feature
+  Feature: Paramaterizing tests in Pytest BDD
+  
+    Scenario: Check varities of fruit
+      Given There are 3 varieties of fruit
+      When We add a same variety of fruit
+      Then There is same count of varieties
+      But If we add a different variety of fruit
+      Then The count of varieties increases to 4
+  
+    Scenario: Paramaterize benefits
+      Given We have 5 fruits
+      When I eat 3 fruits
+      And I eat 2 fruits
+      Then I should have 0 fruits
+  ```
+
+  `test_bddParamaterize.py`
+  
+  ```python
+  from pytest_bdd import scenario, scenarios, when, then, given, parsers
+  from pathlib import Path
+  import pytest
+  from pytest_bdd.generation import print_missing_code
+  
+  featureFileDir = 'feature_dir'
+  featureFile = 'test_paramaterzie.feature'
+  
+  BASE_DIR = Path(__file__).resolve().parent
+  FEATURE_FILE=BASE_DIR.joinpath(featureFileDir).joinpath(featureFile)
+  
+  scenarios(FEATURE_FILE)
+  
+  @given("There are 3 varieties of fruit",target_fixture="fruits")
+  def exsistingFruits():
+      fruits = {'apple', 'grapes', 'strawberry'}
+      print(f"Fruits: {fruits}. There are total of {len(fruits)}")
+      return fruits
+  
+  @when("We add a same variety of fruit")
+  def addSameFruit(fruits):
+      print("\nAdding a fruit that is already there in the set.")
+      fruits.add("grapes")
+  
+  @then("There is same count of varieties")
+  def same_count(fruits):
+      print(f"There are still {len(fruits)} fruit varieties.")
+      assert len(fruits) == 3
+  
+  
+  @then("If we add a different variety of fruit")
+  def addDiffFruit(fruits):
+      print("\nTomato added to fruits")
+      fruits.add("Tomato")
+  
+  @then(parsers.parse("The count of varieties increases to {count:d}"))
+  def updated_count(fruits,count):
+      print(f"\nThere are {count} varieties of fruits.")
+      assert len(fruits) == count
+  
+  
+  # Scenario: Paramaterize Benefits
+  
+  @given(parsers.parse("We have {count:d} fruits"),target_fixture="start_fruits")
+  def exsistingFruits(count):
+      return dict(start=count,eat = 0)
+  
+  @when(parsers.parse("I eat {eat:d} fruits"))
+  def eat3ruits(start_fruits,eat):
+      print(f"\nWe have eaten {eat} fruits.")
+      start_fruits["eat"] += eat
+  
+  @then(parsers.parse("I should have {left:d} fruits"))
+  def shouldHaveFruits(start_fruits,left):
+      diff = start_fruits["start"] - start_fruits["eat"]
+      print(f"\nWe have {diff} fruits remaining.")
+      assert start_fruits["start"] - start_fruits["eat"] == left
+  
+  ```
+  
+- Here, you can see for the 2nd scenario in the feature file `test_paramaterzie.feature`, we have used the same 
+  function in the python file `test_bddParamaterize.py` for the  `When` step-definition. Because, the only 
+  difference there was the number.
+
+- If you execute this, we see the following output:
+
+  ```bash
+  pytest -v -s test_bddParamaterize.py                        2 ✘  pythonProject   at 15:50:08  
+  ====================================================================== test session starts ======================================================================
+  platform darwin -- Python 3.11.3, pytest-8.3.4, pluggy-1.5.0 -- /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject/.venv/bin/python
+  cachedir: .pytest_cache
+  rootdir: /Users/akd/Github/pytest-tutorial/pytest-automation/pythonProject
+  configfile: pytest.ini
+  plugins: bdd-8.1.0
+  collected 2 items                                                                                                                                               
+  
+  test_bddParamaterize.py::test_check_varities_of_fruit Fruits: {'apple', 'grapes', 'strawberry'}. There are total of 3
+  
+  Adding a fruit that is already there in the set.
+  There are still 3 fruit varieties.
+  
+  Tomato added to fruits
+  
+  There are 4 varieties of fruits.
+  PASSED
+  test_bddParamaterize.py::test_paramaterize_benefits 
+  We have eaten 3 fruits.
+  
+  We have eaten 2 fruits.
+  
+  We have 0 fruits remaining.
+  PASSED
+  
+  ======================================================================= 2 passed in 0.01s =======================================================================
+  ```

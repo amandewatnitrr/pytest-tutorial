@@ -6,3 +6,9 @@ Feature: Paramaterizing tests in Pytest BDD
     Then There is same count of varieties
     But If we add a different variety of fruit
     Then The count of varieties increases to 4
+
+  Scenario: Paramaterize benefits
+    Given We have 5 fruits
+    When I eat 3 fruits
+    And I eat 2 fruits
+    Then I should have 0 fruits
